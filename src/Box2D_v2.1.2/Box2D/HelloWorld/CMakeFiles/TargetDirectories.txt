@@ -1,0 +1,3 @@
+/Users/johanpelkonen/Downloads/Box2D_v2.1.2/Box2D/HelloWorld/CMakeFiles/rebuild_cache.dir
+/Users/johanpelkonen/Downloads/Box2D_v2.1.2/Box2D/HelloWorld/CMakeFiles/edit_cache.dir
+/Users/johanpelkonen/Downloads/Box2D_v2.1.2/Box2D/HelloWorld/CMakeFiles/HelloWorld.dir
