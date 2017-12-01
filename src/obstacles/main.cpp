@@ -17,7 +17,7 @@ b2Vec2 convertWorldToScreen( const b2Vec2& v) {
 int main(int argc, char** argv)
 {
   //Setup SFML
-  sf::RenderWindow window( sf::VideoMode( WWIDTH,WHEIGHT), "Obstacle test");
+  sf::RenderWindow window( sf::VideoMode( WWIDTH,WHEIGHT), "Obsstacle test");
 
   B2_NOT_USED(argc);
   B2_NOT_USED(argv);
