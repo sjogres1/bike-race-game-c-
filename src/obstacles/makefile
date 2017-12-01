@@ -3,15 +3,15 @@
 # NOTE: in vim, :set noexpandtab
 
 # -- Compiler --
-CC = g++
-CFLAGS = -std=c++0x -g -Wall -Wextra -Wno-missing-field-initializers
+CC=g++
+CFLAGS=-std=c++0x -g -Wall -Wextra -Wno-missing-field-initializers
 SOURCES=main.cpp
 OBJECTS=main.o
 EXECUTABLE=main
 INCLUDES = 
 
 # -- Linker --
-LFLAGS = 
+#LFLAGS+=-L /lib 
 LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lBox2D
 
 # -- Targets --
