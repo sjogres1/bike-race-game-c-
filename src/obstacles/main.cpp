@@ -26,11 +26,12 @@ int main(int argc, char** argv)
   sf::Texture GroundTexture;
   sf::Texture BoxTexture;
   sf::Texture CoinTexture;
-  sf::Texture RampTexture
+  sf::Texture RampTexture;
+
   CoinTexture.loadFromFile("coin.png");
   GroundTexture.loadFromFile("wood.png");
   BoxTexture.loadFromFile("rock.png");
-  RampTexture.loadFromFile("ramp1.jpg");
+  RampTexture.loadFromFile("ramp.png");
   // Sprites
   sf::Sprite CoinSprite;
   sf::Sprite GroundSprite;
@@ -49,9 +50,9 @@ int main(int argc, char** argv)
   BodySprite.setTextureRect(sf::IntRect(6, 6, 8 * SCALE, 10 * SCALE));
   BodySprite.setOrigin( 5 * SCALE, 1 * SCALE); //origin in middle
 
-  RampSprite.setTexture();
-  RampSprite.setTextureRect(sf::IntRect(1, 1, 6.7 * SCALE, 6.7*SCALE));
-  RampSprite.setOrigin(5*SCALE,30*SCALE); // origin in the middle
+  RampSprite.setTexture(RampTexture);
+  RampSprite.setTextureRect(sf::IntRect(0, 0, 15 * SCALE, 10*SCALE));
+  RampSprite.setOrigin(14*SCALE,-25*SCALE); // origin in the middle
 
   // Define the gravity vector.
   b2Vec2 gravity(0.0f, -1.0f);
@@ -133,6 +134,10 @@ int main(int argc, char** argv)
     CoinSprite.setPosition(pos.x, pos.y);
     CoinSprite.setRotation(180/b2_pi * angle);
     window.draw(CoinSprite);
+
+    RampSprite.setPosition(pos.x, pos.y);
+    RampSprite.setRotation(250/b2_pi * angle);
+    window.draw(RampSprite);
 
     BodySprite.setPosition(pos.x, pos.y);
     BodySprite.setRotation(180/b2_pi * angle);
