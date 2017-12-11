@@ -1,0 +1,276 @@
+//
+//  GameObject.hpp
+//  Hillside1
+//
+
+#ifndef Hillside1_GameObject_hpp
+#define Hillside1_GameObject_hpp
+
+#include <iostream>
+#include <iomanip>
+
+namespace {
+	const float32 Pix_Per_M = 20.0f;
+}
+
+class GameObject
+{
+public:
+	GameObject(b2World* world) : world(world)
+	{ }
+	
+protected:
+	b2World* world;
+};
+
+class Ground : public GameObject
+{
+public:
+	Ground(b2World* world) : GameObject(world)
+	{
+		b2BodyDef bd;
+		groundBody = world->CreateBody(&bd);
+			
+		vertices.push_back(b2Vec2(-5.0f, -20.0f));
+		vertices.push_back(b2Vec2(40.0f, -20.0f));
+		vertices.push_back(b2Vec2(60.0f, -22.0f));
+		vertices.push_back(b2Vec2(80.0f, -15.0f));
+		vertices.push_back(b2Vec2(150.0f, -18.0f));
+		vertices.push_back(b2Vec2(230.0f, -26.0f));
+		vertices.push_back(b2Vec2(330.0f, -35.0f));
+		vertices.push_back(b2Vec2(430.0f, -15.0f));
+		vertices.push_back(b2Vec2(830.0f, -15.0f));
+
+		b2FixtureDef fd;
+		fd.density = 0.0f;
+		fd.friction = 0.6f;
+               // groundBody->CreateFixture(&fd);
+		
+		/*for (auto v = vertices.begin(); v != vertices.end();)
+		{
+			auto curr = v;
+			if (++v == vertices.end()) break;
+			b2EdgeShape edgeShape;
+			edgeShape.Set(*curr, *v);
+			fd.shape = &edgeShape;
+			groundBody->CreateFixture(&fd);
+		}*/
+		
+	}
+	
+	void draw(sf::RenderTarget &rt) const
+	{
+		float thickness = 1.0f * Pix_Per_M;
+		for (auto v = vertices.begin(); v != vertices.end();)
+		{
+			auto curr = v;
+			if (++v == vertices.end()) break;
+			sf::ConvexShape shape;
+			shape.setFillColor(sf::Color::Yellow);
+			shape.setPointCount(4);
+			shape.setPoint(0, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)+thickness));
+			shape.setPoint(1, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)+thickness));
+			shape.setPoint(2, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)));
+			shape.setPoint(3, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)));
+			rt.draw(shape);
+		}
+	}
+	
+private:
+	std::vector<b2Vec2> vertices;
+	b2Body* groundBody;
+};
+
+class Player : public GameObject
+{
+public:
+	Player(b2World* world) : GameObject(world)
+	{
+		m_hz = 3.0f;
+		m_zeta = 0.1f;
+		m_speed = 30.0f;
+		
+		b2PolygonShape polygonShape;
+		b2Vec2 vertices[6];
+		vertices[0].Set(-3.3f, -0.7f);
+		vertices[1].Set(3.3f, -0.7f);
+		vertices[2].Set(3.3f, 0.0f);
+		vertices[3].Set(1.5f, 1.0f);
+		vertices[4].Set(-1.5f, 1.0f);
+		vertices[5].Set(-3.3f, 0.0f);
+		polygonShape.Set(vertices, 6);
+		
+		b2CircleShape circle;
+		circle.m_radius = 1.3f;
+		
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(0.0f, 2.8f);
+		body = world->CreateBody(&bd);
+		b2FixtureDef fixtureDef;
+		fixtureDef.shape = &polygonShape;
+		fixtureDef.density = 1.0f;
+		fixtureDef.friction = 0.3f;
+		fixtureDef.restitution = 0.2;
+		body->CreateFixture(&fixtureDef);
+
+		b2FixtureDef fd;
+		fd.shape = &circle;
+		fd.density = 1.5f;
+		fd.friction = 4.0f;
+		fd.restitution = 0.6;
+		
+		bd.position.Set(-2.4f, 0.4f);
+		m_wheel1 = world->CreateBody(&bd);
+		m_wheel1->CreateFixture(&fd);
+		
+		bd.position.Set(2.4f, 0.4f);
+		m_wheel2 = world->CreateBody(&bd);
+		m_wheel2->CreateFixture(&fd);
+		
+		b2RevoluteJoint *jd;
+		b2Vec2 axis(0.0f, 1.0f);
+		
+		/*jd.Initialize(body, m_wheel1, m_wheel1->GetPosition(), axis);
+		jd.motorSpeed = -1.0f;
+		jd.maxMotorTorque = 500.0f;
+		jd.enableMotor = true;
+		jd.frequencyHz = 4;
+		jd.dampingRatio = 0.1;
+		m_spring1 = (b2WheelJoint*)world->CreateJoint(&jd);
+		
+		jd.Initialize(body, m_wheel2, m_wheel2->GetPosition(), axis);
+		jd.motorSpeed = 0.0f;
+		jd.maxMotorTorque = 0.0f;
+		jd.enableMotor = false;
+		jd.frequencyHz = 4;
+		jd.dampingRatio = 0.1;
+		m_spring2 = (b2WheelJoint*)world->CreateJoint(&jd);
+                 */ 
+	
+		wheel1.setRadius(1.3f * Pix_Per_M);
+		wheel1.setPointCount(12);
+		wheel2.setRadius(1.3f * Pix_Per_M);
+		wheel2.setPointCount(12);
+		
+		createShape(polygonShape);
+		
+	}
+	
+	void draw(sf::RenderTarget &rt) const
+	{
+		rt.draw(shape);
+		rt.draw(wheel1);
+		rt.draw(wheel2);
+	}
+	
+	void update()
+	{
+		setDrawingPosition();
+	}
+	
+	void setDrawingPosition()
+	{
+		shape.setPosition(body->GetPosition().x*Pix_Per_M,
+						  body->GetPosition().y*Pix_Per_M*(-1));
+		shape.setRotation(body->GetAngle() * (-180.0f / b2_pi));
+		
+		wheel1.setOrigin(1.3f * Pix_Per_M, 1.3f * Pix_Per_M);
+		wheel1.setPosition((m_wheel1->GetPosition().x )*Pix_Per_M,
+						   (m_wheel1->GetPosition().y)*Pix_Per_M*(-1));
+		wheel1.setRotation(m_wheel1->GetAngle() * (-180.0f / b2_pi));
+		
+		wheel2.setOrigin(1.3f * Pix_Per_M, 1.3f * Pix_Per_M);
+		wheel2.setPosition((m_wheel2->GetPosition().x)*Pix_Per_M,
+						   (m_wheel2->GetPosition().y)*Pix_Per_M*(-1));
+		wheel2.setRotation(m_wheel2->GetAngle() * (-180.0f / b2_pi));
+	}
+	
+	void createShape(b2PolygonShape polygonShape)
+	{
+		int32 vcount = polygonShape.GetVertexCount();
+		shape.setPointCount(vcount);
+		for (int32 i = 0; i < vcount; i++) {
+			const b2Vec2 v = polygonShape.GetVertex(i);
+			shape.setPoint(i, sf::Vector2f(v.x*Pix_Per_M,
+										   v.y*Pix_Per_M*(-1)));
+		}
+		
+		//auto fixt = m_wheel1->GetFixtureList();
+		//fixt->GetBody()->GetPosition()
+	
+		setDrawingPosition();
+	}
+	
+	const b2Vec2 getPosition() const
+	{
+		return body->GetPosition();
+	}
+	
+	/*void forward()
+	{
+		accelerate(4.0f);
+	}*/
+	
+	/*void backwards()
+	{
+		accelerate(-2.0f);
+	}*/
+	
+        // Does not work
+	/*void stop()
+	{
+		m_spring1->SetMotorSpeed(0.0f);
+	}*/
+	
+	/*void accelerate(float32 change=1.0f)
+	{
+		auto mspeed = m_spring1->GetMotorSpeed();
+		if ((change > 0 && mspeed < 50.0f) || (change < 0 && mspeed > -30.0f))
+			m_spring1->SetMotorSpeed(mspeed-change);
+	}
+	
+	void decreaseSpeed(float32 speedDecrease=1.0f)
+	{
+		auto mspeed = m_spring1->GetMotorSpeed();
+		
+		if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease)
+			stop();
+		 if (mspeed > 0)
+			m_spring1->SetMotorSpeed(mspeed-speedDecrease);
+		else if (mspeed < 0)
+			m_spring1->SetMotorSpeed(mspeed+speedDecrease);
+	}*/
+	
+	/* DESCRIPTION:
+	 * Used for debugging player movement
+	 * Parameter: output stream
+	 */
+	void debugLog(std::ostream& out)
+	{
+		b2Vec2 position = body->GetPosition();
+		float32 angle = body->GetAngle();
+		out << std::setprecision(2) << std::fixed << position.x << " " << position.y << " " << angle << std::endl;
+	}
+	
+	sf::ConvexShape shape;
+	
+	sf::CircleShape wheel1;
+	sf::CircleShape wheel2;
+	
+	b2Body* body;
+	b2Body* m_wheel1;
+	b2Body* m_wheel2;
+	
+        //Player does not work properly
+        
+	//b2WheelJoint* m_spring1;
+	//b2WheelJoint* m_spring2;
+	
+	float32 m_hz;
+	float32 m_zeta;
+	float32 m_speed;
+};
+
+
+#endif
