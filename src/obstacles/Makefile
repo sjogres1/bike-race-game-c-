@@ -5,8 +5,8 @@
 # -- Compiler --
 CC=g++
 CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
-SOURCES=main.cpp Utilities.cpp Game.cpp MapObjectBackground.cpp MapObject.cpp Map.cpp MapObjectBackground.hpp MapObject.hpp Utilities.hpp Settings.hpp Screen.hpp Game.hpp Map.hpp
-OBJECTS=main.o Game.o MapObject.o MapObjectBackground.o Utilities.o Map.o
+SOURCES=main.cpp Game.hpp GameObject.hpp Interface.hpp
+OBJECTS=main.o
 EXECUTABLE=main
 INCLUDES =  
 
