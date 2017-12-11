@@ -4,9 +4,9 @@
 
 # -- Compiler --
 CC=g++
-CFLAGS=-c -g -std=c++11 -Wall -Wextra -Wno-missing-field-initializers
-SOURCES=main.cpp game.hpp game.cpp screen.cpp terrain.hpp terrain.cpp  screen.hpp 
-OBJECTS=main.o game.o screen.o terrain.o screen.o 
+CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
+SOURCES=main.cpp Utilities.cpp Game.cpp MapObjectBackground.cpp MapObject.cpp Map.cpp MapObjectBackground.hpp MapObject.hpp Utilities.hpp Settings.hpp Screen.hpp Game.hpp Map.hpp
+OBJECTS=main.o Game.o MapObject.o MapObjectBackground.o Utilities.o Map.o
 EXECUTABLE=main
 INCLUDES =  
 
@@ -23,7 +23,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(INCLUDES) $(LFLAGS) $(LIBS) -o $@ 
 
 .cc.o:
-	$(CC) $(INCLUDES) $(CFLAGS) $< -o $@
+	$(CC) $(INCLUDES) $(CPPFLAGS) $< -o $@
 
 run:
 	./main
