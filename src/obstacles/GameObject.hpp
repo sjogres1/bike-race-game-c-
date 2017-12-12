@@ -414,7 +414,7 @@ public:
 			fd.isSensor = true;
 		
 			b2BodyDef bd;
-			bd.position.Set(x,y);
+			bd.position.Set((x +5 +rand() % 5),(y+5+rand() % 5));
 			m_coin = world->CreateBody(&bd);
 			m_coin->CreateFixture(&fd);
 			m_coin->SetUserData(this);

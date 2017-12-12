@@ -21,7 +21,7 @@ namespace {
 	b2Vec2 gravity(0.0f, -9.8f);
 	const float32 timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 8;
-	const int32 positionIterations = 3;
+	const int32 positionIterations = 6;
         const float y_points = 200;
         const float x_points = 475;
 }
@@ -69,8 +69,29 @@ public:
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
         sf::View view = window.getDefaultView();
+        sf::Texture texture;
+        sf::Sprite background;
+        sf::Vector2u TextureSize;
+        sf::Vector2u WindowSize;
+        if (!texture.loadFromFile("terrain_England_background.png"))
+        {
+
+        }
+        else {
+            TextureSize = texture.getSize();
+            WindowSize = window.getSize();
+            float ScaleX = ((float) WWidth / TextureSize.x) * 20;
+            float ScaleY = ((float) WHeight / TextureSize.y) * 20;
+            
+            background.setTexture(texture);
+            background.setScale(ScaleX, ScaleY);
+            
+        }
         
-        window.setView(view);
+            
+
+        
+        //window.setView(view);
         b2World world(gravity, true);
         CoinListener cl;
         world.SetContactListener(&cl);
@@ -137,7 +158,7 @@ public:
 
             view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
              
-             //window.draw(background);
+             window.draw(background);
              window.setView(view);
                     
 			//draw objects
