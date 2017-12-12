@@ -112,7 +112,7 @@ public:
 			auto curr = v;
 			if (++v == vertices.end()) break;
 			sf::ConvexShape shape;
-			shape.setFillColor(sf::Color::Yellow);
+			shape.setFillColor(sf::Color::Green);
 			shape.setPointCount(4);
 			shape.setPoint(0, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)+thickness));
 			shape.setPoint(1, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)+thickness));
@@ -212,22 +212,7 @@ public:
                 
                 m_spring2 = (b2RevoluteJoint*)world->CreateJoint( &WheelJointFront );
 		
-		/*jd.Initialize(body, m_wheel1, m_wheel1->GetPosition(), axis);
-		jd.motorSpeed = -1.0f;
-		jd.maxMotorTorque = 500.0f;
-		jd.enableMotor = true;
-		jd.frequencyHz = 4;
-		jd.dampingRatio = 0.1;
-		m_spring1 = (b2WheelJoint*)world->CreateJoint(&jd);
 		
-		jd.Initialize(body, m_wheel2, m_wheel2->GetPosition(), axis);
-		jd.motorSpeed = 0.0f;
-		jd.maxMotorTorque = 0.0f;
-		jd.enableMotor = false;
-		jd.frequencyHz = 4;
-		jd.dampingRatio = 0.1;
-		m_spring2 = (b2WheelJoint*)world->CreateJoint(&jd);
-                 */ 
 	
 		wheel1.setRadius(1.3f * Pix_Per_M);
 		wheel1.setPointCount(12);
