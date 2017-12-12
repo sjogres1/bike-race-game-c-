@@ -15,24 +15,24 @@ public:
 	
 	static void playerKeyboard(sf::Event event, Player* player)
 	{
-		/*if (event.type == sf::Event::KeyPressed) {
-			switch (event.key.code)
+		if (event.type == sf::Event::KeyPressed) {
+			switch (event.key.code)//(event.key.code)
 			{
-				case sf::Keyboard::A:
+				case sf::Keyboard::Down:
 					player->backwards();
 					break;
 					
-				case sf::Keyboard::S:
+				case sf::Keyboard::Space:
 					player->stop();
 					break;
 					
-				case sf::Keyboard::D:
+				case sf::Keyboard::Up:
 					player->forward();
 					break;
 			}
-		} else  {
-			player->decreaseSpeed();
-		}*/
+		}// else  {
+		//	player->decreaseSpeed();
+		//}
 	}
 
 };
