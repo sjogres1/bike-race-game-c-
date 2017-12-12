@@ -359,6 +359,15 @@ public:
 			m_spring2->SetMotorSpeed(mspeed2+speedDecrease);
                 }
 	}
+
+	void tiltback(){
+            //auto body_angle = body->GetAngle();
+            body->ApplyTorque(4000);
+        }
+        void tiltforward(){
+            //auto body_angle = body->GetAngle();
+            body->ApplyTorque(-4000);
+        }
 	
 	/* DESCRIPTION:
 	 * Used for debugging player movement

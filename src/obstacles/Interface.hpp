@@ -29,6 +29,14 @@ public:
 				case sf::Keyboard::Up:
 					player->forward();
 					break;
+
+				case sf::Keyboard::Left:
+                                        player->tiltback();
+                                        break;
+                                        
+                            	case sf::Keyboard::Right:
+                                        player->tiltforward();
+                                        break;
 			}
 		}// else  {
 		//	player->decreaseSpeed();
