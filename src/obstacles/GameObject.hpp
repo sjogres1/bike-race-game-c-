@@ -28,8 +28,9 @@ class Ground : public GameObject
 public:
 	Ground(b2World* world) : GameObject(world)
 	{
-		b2BodyDef bd;
-		groundBody = world->CreateBody(&bd);
+		b2BodyDef ground;
+                ground.type = b2_staticBody;
+		groundBody = world->CreateBody(&ground);
 			
 		vertices.push_back(b2Vec2(-5.0f, -20.0f));
 		vertices.push_back(b2Vec2(40.0f, -20.0f));
@@ -40,21 +41,28 @@ public:
 		vertices.push_back(b2Vec2(330.0f, -35.0f));
 		vertices.push_back(b2Vec2(430.0f, -15.0f));
 		vertices.push_back(b2Vec2(830.0f, -15.0f));
+                
+                /*vertices[0].Set(-5.0f, -20.0f);
+                vertices[1].Set(430.0f, -20.0f);
+                vertices[2].Set(430.0f, -18.0f);
+                vertices[3].Set(-5.0f, -18.0f);*/
 
 		b2FixtureDef fd;
-		fd.density = 0.0f;
+		fd.density = 1.0f;
 		fd.friction = 0.6f;
                // groundBody->CreateFixture(&fd);
 		
-		/*for (auto v = vertices.begin(); v != vertices.end();)
+		for (auto v = vertices.begin(); v != vertices.end();)
 		{
 			auto curr = v;
 			if (++v == vertices.end()) break;
-			b2EdgeShape edgeShape;
-			edgeShape.Set(*curr, *v);
+			//b2EdgeShape edgeShape;  // Changed to the next line
+                        b2PolygonShape edgeShape;
+			//edgeShape.Set(*curr, *v);
+                        edgeShape.SetAsEdge(*curr, *v);
 			fd.shape = &edgeShape;
 			groundBody->CreateFixture(&fd);
-		}*/
+		}
 		
 	}
 	
@@ -78,6 +86,7 @@ public:
 	
 private:
 	std::vector<b2Vec2> vertices;
+        //b2Vec2 vertices[4];
 	b2Body* groundBody;
 };
 
