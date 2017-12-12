@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <list>
 
 namespace {
 	const float32 Pix_Per_M = 20.0f;
@@ -50,21 +51,17 @@ public:
 class Ground : public GameObject
 {
 public:
-	Ground(b2World* world)
+	Ground(b2World* world, std::list <std::pair <float, float>> mapPoints)
+	//auto groundPoints = givenPoints;
 	{
 		b2BodyDef ground;
                 ground.type = b2_staticBody;
 		groundBody = world->CreateBody(&ground);
 			
-		vertices.push_back(b2Vec2(-5.0f, -20.0f));
-		vertices.push_back(b2Vec2(40.0f, -20.0f));
-		vertices.push_back(b2Vec2(60.0f, -22.0f));
-		vertices.push_back(b2Vec2(80.0f, -15.0f));
-		vertices.push_back(b2Vec2(150.0f, -18.0f));
-		vertices.push_back(b2Vec2(230.0f, -26.0f));
-		vertices.push_back(b2Vec2(330.0f, -35.0f));
-		vertices.push_back(b2Vec2(430.0f, -15.0f));
-		vertices.push_back(b2Vec2(830.0f, -15.0f));
+		for (auto const& pair : mapPoints) {
+			vertices.push_back(b2Vec2(pair.first, pair.second));
+		}
+		
                 
                 /*vertices[0].Set(-5.0f, -20.0f);
                 vertices[1].Set(430.0f, -20.0f);

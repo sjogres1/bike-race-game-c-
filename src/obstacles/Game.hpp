@@ -12,6 +12,7 @@
 #include <sstream>
 #include <utility>
 #include "Interface.hpp"
+#include <list>
 
 
 namespace {
@@ -33,8 +34,24 @@ public:
     
     ~Game() {
         
-    }
-    
+	}
+	std::list<std::pair<float, float>> generateGroundPoints(int difficulty, int length){
+		std::list<std::pair<float, float>> groundPoints;
+		std::pair<float, float> coordinatesAtSection;
+		std::pair<float, float> firstPair;
+		firstPair.first = -20;
+		firstPair.second = -10;
+		groundPoints.push_back(firstPair);
+
+		for(int section = 0; section <= length; section = section + 10)
+		{
+			coordinatesAtSection.first = section;
+			coordinatesAtSection.second = -20 + rand() % difficulty;
+			groundPoints.push_back(coordinatesAtSection);
+		}
+		return groundPoints;
+	}
+
     void open(void) {
         sf::RenderWindow window(sf::VideoMode(WWidth, WHeight), "Hillside coin test", sf::Style::Default);
         
@@ -46,8 +63,8 @@ public:
         b2World world(gravity, true);
         CoinListener cl;
         world.SetContactListener(&cl);
-        
-        Ground* ground = new Ground(&world);
+        auto groundPoints = generateGroundPoints(10, 500);
+        Ground* ground = new Ground(&world, groundPoints);
         objects.push_back(ground);
         Player* player = new Player(&world);
         objects.push_back(player);
