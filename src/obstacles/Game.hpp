@@ -8,32 +8,65 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
+#include <sstream>
+#include <utility>
 #include "Interface.hpp"
 
 
 namespace {
 	const float WWidth = 1024;
 	const float WHeight = 768;
-	b2Vec2 gravity(0.0f, -9.8.0f);
+	b2Vec2 gravity(0.0f, -9.8f);
 	const float32 timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 8;
 	const int32 positionIterations = 3;
+        const float y_points = 200;
+        const float x_points = 475;
 }
 
 class Game {
 public:
-    Game() : window(sf::VideoMode(WWidth, WHeight), "HillClimb racing") { }
+    Game() {
+        
+    }
+    
+    ~Game() {
+        
+    }
     
     void open(void) {
+        sf::RenderWindow window(sf::VideoMode(WWidth, WHeight), "Hillside coin test", sf::Style::Default);
+        
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
         sf::View view = window.getDefaultView();
         
         window.setView(view);
         b2World world(gravity, true);
+        CoinListener cl;
+        world.SetContactListener(&cl);
         
-        Ground ground(&world);
-        Player player(&world);
+        Ground* ground = new Ground(&world);
+        objects.push_back(ground);
+        Player* player = new Player(&world);
+        objects.push_back(player);
+        
+        for (size_t i = 1; i < 75; i++) {
+            objects.push_back(new Coin(&world, player, 10*i, -14));
+        }
+        
+       std::stringstream ss;
+        ss << "Points: " << 0;
+       /* 
+        sf::Text atext;
+        atext.setFont(font);
+	atext.setCharacterSize(25);
+	atext.setStyle(sf::Text::Bold);
+	atext.setColor(sf::Color::White);
+	atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);
+	atext.setString(ss.str()); 
+	window.draw(atext);*/
         
        
         
@@ -52,7 +85,7 @@ public:
 				if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
 					window.close();
 				}
-				Interface::playerKeyboard(event, &player);
+				Interface::playerKeyboard(event, player);
 			}
 			
 			sf::Time dt = clock.restart();
@@ -64,15 +97,31 @@ public:
 			}
 
 			// Set view to follow player
-			view.setCenter(player.getPosition().x*20+100, -player.getPosition().y*20-150);
-			window.setView(view);
+                        
+                window.clear();
+                        
+            /* ss.clear();
+            ss.str(std::string());
+            ss << "Points: " << player->getPoints();
+            atext.setString(ss.str()); 
+            window.draw(atext);
+            atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);*/           
+
+            view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
+             
+             //window.draw(background);
+             window.setView(view);
+                    
+			//draw objects
+			player->update();
+                        for (auto obj : objects)
+                            for (auto obj : objects) {
+                                obj->update();
+                                obj->render(window);
+                            }
+			//player.debugLog(std::cout);
 			
-			player.update();
-			player.debugLog(std::cout);
-			
-			window.clear();
-			ground.draw(window);
-			player.draw(window);
+		
 			window.display();
 		}
     }
@@ -80,7 +129,12 @@ public:
 	
 private:
 	sf::RenderWindow window;
+        sf::ContextSettings settings;
 	sf::Clock clock;
+        sf::ContextSettings setting;
+        std::vector<GameObject*> objects;
+        std::vector<Coin> coins;
+       
 };
 
 #endif

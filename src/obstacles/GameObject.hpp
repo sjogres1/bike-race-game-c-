@@ -12,21 +12,45 @@
 namespace {
 	const float32 Pix_Per_M = 20.0f;
 }
+ namespace B2toSFRenderer {
+ 	sf::ConvexShape PolygonToSFConvex(b2PolygonShape& polygonShape)
+ 	{
+ 		sf::ConvexShape shape;
+ 		int32 vcount = polygonShape.GetVertexCount();
+ 		shape.setPointCount(vcount);
+ 		for (int32 i = 0; i < vcount; i++) {
+ 			const b2Vec2 v = polygonShape.GetVertex(i);
+ 			shape.setPoint(i, sf::Vector2f(v.x*Pix_Per_M,
+ 										   v.y*Pix_Per_M*(-1)));
+ 		}
+ 		return shape;
+ 	}
+ 	
+ 	sf::CircleShape CircleToSFCircle(b2CircleShape& circleShape)
+ 	{
+ 		sf::CircleShape shape;
+ 		float32 radius = circleShape.m_radius;
+ 		shape.setPointCount(16);
+ 		shape.setRadius(radius * Pix_Per_M);
+ 		shape.setOrigin(radius * Pix_Per_M, radius * Pix_Per_M);
+ 		return shape;
+ 	}
+ }
 
 class GameObject
 {
 public:
-	GameObject(b2World* world) : world(world)
-	{ }
-	
-protected:
-	b2World* world;
+    virtual void update() {};
+    virtual ~GameObject() {};
+    virtual void render(sf::RenderTarget & rt) const = 0;
+    
 };
+	
 
 class Ground : public GameObject
 {
 public:
-	Ground(b2World* world) : GameObject(world)
+	Ground(b2World* world)
 	{
 		b2BodyDef ground;
                 ground.type = b2_staticBody;
@@ -65,6 +89,23 @@ public:
 		}
 		
 	}
+        
+        void render(sf::RenderTarget &rt) const {
+            float thickness = 1.0f * Pix_Per_M;
+            for (auto v = vertices.begin(); v!= vertices.end();)
+            {
+                auto curr = v;
+                if(++v == vertices.end()) break;
+                sf::ConvexShape shape;
+                shape.setFillColor(sf::Color::Yellow);
+                shape.setPointCount(4);
+                shape.setPoint(0, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)+thickness));
+ 		shape.setPoint(1, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)+thickness));
+ 		shape.setPoint(2, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)));
+ 		shape.setPoint(3, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)));
+ 		rt.draw(shape);
+            }
+        }
 	
 	void draw(sf::RenderTarget &rt) const
 	{
@@ -93,8 +134,10 @@ private:
 class Player : public GameObject
 {
 public:
-	Player(b2World* world) : GameObject(world)
-	{
+	Player(b2World* world)
+        {
+	
+                points = 0;
 		m_hz = 3.0f;
 		m_zeta = 0.1f;
 		m_speed = 30.0f;
@@ -162,11 +205,15 @@ public:
 		wheel2.setRadius(1.3f * Pix_Per_M);
 		wheel2.setPointCount(12);
 		
-		createShape(polygonShape);
+		//createShape(polygonShape);
 		
 	}
+        
+        ~Player() {
+            
+        }
 	
-	void draw(sf::RenderTarget &rt) const
+	void render(sf::RenderTarget &rt) const
 	{
 		rt.draw(shape);
 		rt.draw(wheel1);
@@ -174,11 +221,6 @@ public:
 	}
 	
 	void update()
-	{
-		setDrawingPosition();
-	}
-	
-	void setDrawingPosition()
 	{
 		shape.setPosition(body->GetPosition().x*Pix_Per_M,
 						  body->GetPosition().y*Pix_Per_M*(-1));
@@ -194,8 +236,26 @@ public:
 						   (m_wheel2->GetPosition().y)*Pix_Per_M*(-1));
 		wheel2.setRotation(m_wheel2->GetAngle() * (-180.0f / b2_pi));
 	}
+       
 	
-	void createShape(b2PolygonShape polygonShape)
+	/*void setDrawingPosition()
+	{
+		shape.setPosition(body->GetPosition().x*Pix_Per_M,
+						  body->GetPosition().y*Pix_Per_M*(-1));
+		shape.setRotation(body->GetAngle() * (-180.0f / b2_pi));
+		
+		wheel1.setOrigin(1.3f * Pix_Per_M, 1.3f * Pix_Per_M);
+		wheel1.setPosition((m_wheel1->GetPosition().x )*Pix_Per_M,
+						   (m_wheel1->GetPosition().y)*Pix_Per_M*(-1));
+		wheel1.setRotation(m_wheel1->GetAngle() * (-180.0f / b2_pi));
+		
+		wheel2.setOrigin(1.3f * Pix_Per_M, 1.3f * Pix_Per_M);
+		wheel2.setPosition((m_wheel2->GetPosition().x)*Pix_Per_M,
+						   (m_wheel2->GetPosition().y)*Pix_Per_M*(-1));
+		wheel2.setRotation(m_wheel2->GetAngle() * (-180.0f / b2_pi));
+	}*/
+	
+	/*void createShape(b2PolygonShape polygonShape)
 	{
 		int32 vcount = polygonShape.GetVertexCount();
 		shape.setPointCount(vcount);
@@ -208,8 +268,8 @@ public:
 		//auto fixt = m_wheel1->GetFixtureList();
 		//fixt->GetBody()->GetPosition()
 	
-		setDrawingPosition();
-	}
+		update();
+	}*/
 	
 	const b2Vec2 getPosition() const
 	{
@@ -255,12 +315,18 @@ public:
 	 * Used for debugging player movement
 	 * Parameter: output stream
 	 */
+        
+        
 	void debugLog(std::ostream& out)
 	{
 		b2Vec2 position = body->GetPosition();
 		float32 angle = body->GetAngle();
 		out << std::setprecision(2) << std::fixed << position.x << " " << position.y << " " << angle << std::endl;
 	}
+        void increasePoints() {points++;}
+        size_t getPoints() {return points;}
+        
+private:
 	
 	sf::ConvexShape shape;
 	
@@ -270,6 +336,8 @@ public:
 	b2Body* body;
 	b2Body* m_wheel1;
 	b2Body* m_wheel2;
+        sf::Texture bodytexture;
+        sf::Texture wheeltexture;
 	
         //Player does not work properly
         
@@ -279,7 +347,97 @@ public:
 	float32 m_hz;
 	float32 m_zeta;
 	float32 m_speed;
+        size_t points;
 };
+
+class Coin : public GameObject 
+{
+public:
+    Coin(b2World* world, Player* p, double x, double y) {
+	      		m_contacting = false;
+	      		collected = false;
+	      		player = p;
+
+	      		b2CircleShape circle;
+			circle.m_radius = 1.0f;
+			coin = B2toSFRenderer::CircleToSFCircle(circle);
+			cointexture.loadFromFile("coin.png");
+        		cointexture.setSmooth(true);
+       			coin.setTexture(&cointexture, true);
+		
+			b2FixtureDef fd;
+			fd.shape = &circle;
+			fd.density = 1.1f;
+			fd.isSensor = true;
+		
+			b2BodyDef bd;
+			bd.position.Set(x,y);
+			m_coin = world->CreateBody(&bd);
+			m_coin->CreateFixture(&fd);
+			m_coin->SetUserData(this);
+		    }
+	
+	void render(sf::RenderTarget &rt) const
+	{
+		if(!collected) {rt.draw(coin);}
+	}
+	
+	
+	void update()
+	{
+		if (m_contacting) {
+    			m_coin->GetWorld()->DestroyBody(m_coin);
+    			collected = true;
+    			player->increasePoints();
+    			
+    		}
+    			
+    		coin.setOrigin(coin.getRadius(), coin.getRadius());
+		coin.setPosition((m_coin->GetPosition().x )*Pix_Per_M,
+						   (m_coin->GetPosition().y)*Pix_Per_M*(-1));
+		
+	}
+	
+  	
+	void startContact() {m_contacting = true;}
+  	void endContact() {m_contacting = false;}
+	
+	private:
+    		b2Body* m_coin;
+		sf::CircleShape coin;
+    		float m_radius;
+    		bool m_contacting;
+    		bool collected;
+    		sf::Texture cointexture;
+    		Player* player;
+
+ };
+ 
+ class CoinListener : public b2ContactListener {
+     void BeginContact(b2Contact* contact) {
+  
+      void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+      if ( bodyUserData )
+        static_cast<Coin*>( bodyUserData )->startContact();
+  
+      bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+      if ( bodyUserData )
+        static_cast<Coin*>( bodyUserData )->startContact();
+  
+    }
+  
+    void EndContact(b2Contact* contact) {
+  
+      void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+      if ( bodyUserData )
+        static_cast<Coin*>( bodyUserData )->endContact();
+  
+      bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+      if ( bodyUserData )
+        static_cast<Coin*>( bodyUserData )->endContact();
+  
+    }
+ };
 
 
 #endif
