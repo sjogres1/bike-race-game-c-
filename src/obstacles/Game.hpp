@@ -39,14 +39,25 @@ public:
 		std::list<std::pair<float, float>> groundPoints;
 		std::pair<float, float> coordinatesAtSection;
 		std::pair<float, float> firstPair;
+		std::pair<float, float> lastPair;
+		int dice;
 		firstPair.first = -20;
 		firstPair.second = -10;
 		groundPoints.push_back(firstPair);
+		float r;
 
-		for(int section = 0; section <= length; section = section + 10)
+		for(int section = 0; section <= length; section = section + 5)
 		{
+			lastPair = groundPoints.back();
 			coordinatesAtSection.first = section;
-			coordinatesAtSection.second = -20 + rand() % difficulty;
+			r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+			dice = rand() % 5;
+			if (dice == 1){
+				coordinatesAtSection.second = lastPair.second + r*difficulty;
+			}
+			if (dice == 0){
+				coordinatesAtSection.second = lastPair.second - r*difficulty;
+			}
 			groundPoints.push_back(coordinatesAtSection);
 		}
 		return groundPoints;
@@ -63,7 +74,7 @@ public:
         b2World world(gravity, true);
         CoinListener cl;
         world.SetContactListener(&cl);
-        auto groundPoints = generateGroundPoints(10, 500);
+        auto groundPoints = generateGroundPoints(3, 500);
         Ground* ground = new Ground(&world, groundPoints);
         objects.push_back(ground);
         Player* player = new Player(&world);
