@@ -4,11 +4,11 @@
 
 # -- Compiler --
 CC=g++
-CFLAGS=-std=c++0x -g -Wall -Wextra -Wno-missing-field-initializers
-SOURCES= main.cpp menu.cpp menu.hpp
-OBJECTS=main.o menu.o
+CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
+SOURCES=main.cpp Game.hpp GameObject.hpp Interface.hpp Car.hpp Coin.hpp
+OBJECTS=main.o
 EXECUTABLE=main
-INCLUDES = 
+INCLUDES =  
 
 # -- Linker --
 #LFLAGS+=-L /lib 
@@ -23,7 +23,7 @@ $(EXECUTABLE): $(OBJECTS)
 	$(CC) $(OBJECTS) $(INCLUDES) $(LFLAGS) $(LIBS) -o $@ 
 
 .cc.o:
-	$(CC) $(INCLUDES) $(CFLAGS) $< -o $@
+	$(CC) $(INCLUDES) $(CPPFLAGS) $< -o $@
 
 run:
 	./main
