@@ -22,8 +22,8 @@ namespace {
 	const float32 timeStep = 1.0f / 60.0f;
 	const int32 velocityIterations = 8;
 	const int32 positionIterations = 6;
-        const float y_points = 200;
-        const float x_points = 475;
+        const float y_points = -500;
+        const float x_points = 400;
 }
 
 class Game {
@@ -68,7 +68,17 @@ public:
         
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
-        sf::View view = window.getDefaultView();
+       
+        sf::Font font;
+        if(!font.loadFromFile("LemonMilk.otf")) {
+            std::cout << "Font does not work";
+        }
+ 		
+                
+ 	
+         
+ 		sf::View view = window.getDefaultView();
+ 		window.setView(view);
         sf::Texture texture;
         sf::Sprite background;
         sf::Vector2u TextureSize;
@@ -107,15 +117,15 @@ public:
         
        std::stringstream ss;
         ss << "Points: " << 0;
-       /* 
+        font.loadFromFile("LemonMilk.otf");
         sf::Text atext;
         atext.setFont(font);
 	atext.setCharacterSize(25);
 	atext.setStyle(sf::Text::Bold);
-	atext.setColor(sf::Color::White);
+	atext.setColor(sf::Color::Blue);
 	atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);
 	atext.setString(ss.str()); 
-	window.draw(atext);*/
+	window.draw(atext);
         
        
         
@@ -149,26 +159,25 @@ public:
                         
                 window.clear();
                         
-            /* ss.clear();
+             ss.clear();
             ss.str(std::string());
             ss << "Points: " << player->getPoints();
             atext.setString(ss.str()); 
-            window.draw(atext);
-            atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);*/           
+            atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);          
 
             view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
              
              window.draw(background);
+             window.draw(atext);
              window.setView(view);
                     
 			//draw objects
-			player->update();
-                        for (auto obj : objects)
+			
                             for (auto obj : objects) {
                                 obj->update();
                                 obj->render(window);
                             }
-			//player.debugLog(std::cout);
+			player->debugLog(std::cout);
 			
 		
 			window.display();
