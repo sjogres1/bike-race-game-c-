@@ -139,6 +139,17 @@ private:
   
     }
  };
+ 
+ /*class Goal : public GameObject
+ {
+public:
+      Goal(b2World* world, Player* player, double x, double y) {
+    
+}
+     
+private:
+
+ };*/
 
 
 #endif /* COIN_HPP */
