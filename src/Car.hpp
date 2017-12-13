@@ -14,6 +14,9 @@
 #ifndef CAR_HPP
 #define CAR_HPP
 
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
+
 #include "GameObject.hpp"
 
 
@@ -26,7 +29,11 @@ class Player : public GameObject
 public:
 	Player(b2World* world)
         {
-	
+            //timeSinceLastUpdate > sf::seconds(timeStep))
+            //timeSinceLastUpdate -= sf::seconds(timeStep);
+                //sf::Time timeSinceLastUpdate = sf::Time::Zero;
+                //timeSinceLastUpdate.asSeconds();
+                        
                 points = 0;
 		m_hz = 3.0f;
 		m_zeta = 0.1f;
@@ -47,7 +54,7 @@ public:
                 
                 wheel1 = B2toSFRenderer::CircleToSFCircle(circle);
                 wheel2 = B2toSFRenderer::CircleToSFCircle(circle);
-		wheeltexture.loadFromFile("rock.png");
+		wheeltexture.loadFromFile("wheel1.png");
         	wheeltexture.setSmooth(true);
        		wheel1.setTexture(&wheeltexture, true);
                 wheel2.setTexture(&wheeltexture, true);
@@ -225,29 +232,25 @@ public:
 	
 	void accelerate(float32 change=1.0f)
 	{
-		/*auto mspeed = m_spring1->GetMotorSpeed();
-		if ((change > 0 && mspeed < 50.0f) || (change < 0 && mspeed > -30.0f))
-			m_spring1->SetMotorSpeed(mspeed-change);*/
                 auto mspeed = m_spring1->GetMotorSpeed();
                 auto mspeed2 = m_spring2->GetMotorSpeed();
-		if ((change > 0 && mspeed < 50.0f && mspeed2 < 50.0f) || (change < 0 && mspeed > -30.0f && mspeed2 > -30.0f))
+		if ((change > 0 && mspeed < 50.0f && mspeed2 < 50.0f) || (change < 0 && mspeed > -30.0f && mspeed2 > -30.0f)){
 			m_spring1->SetMotorSpeed(mspeed-change);
                         m_spring2->SetMotorSpeed(mspeed2-change);
-		//if ((change > 0 && mspeed2 < 50.0f) || (change < 0 && mspeed2 > -30.0f))
+                }
+            //float deltaTime = timeSinceLastUpdate.asSeconds();
+            //if (m_wheel1->GetLinearVelocity().x > 500.0f)
+            //    stop();
+            //else{
+                //accelerate(deltaTime*100*(-acceleration));
+                //m_spring1->SetMotorSpeed(mspeed-deltaTime*100000000000000*(-change));
+            //}
+            //timeSinceLastUpdate.asSeconds();
 			
 	}
 	
 	void decreaseSpeed(float32 speedDecrease=1.0f)
 	{
-		/*auto mspeed = m_spring1->GetMotorSpeed();
-		
-		if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease)
-			stop();
-		if (mspeed > 0)
-			m_spring1->SetMotorSpeed(mspeed-speedDecrease);
-		else if (mspeed < 0)
-			m_spring1->SetMotorSpeed(mspeed+speedDecrease);*/
-                
                 auto mspeed = m_spring1->GetMotorSpeed();
 		auto mspeed2 = m_spring2->GetMotorSpeed();
 		if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease && mspeed2 < 2*speedDecrease && mspeed2 > 2*speedDecrease)
@@ -264,11 +267,29 @@ public:
         
         void tiltback(){
             //auto body_angle = body->GetAngle();
+            float desiredAngle = 0;
             body->ApplyTorque(4000);
+            float bodyAngle = body->GetAngle();
+            float nextAngle = bodyAngle + body->GetAngularVelocity() / 60.0;
+  float totalRotation = desiredAngle - nextAngle;
+  while ( totalRotation < -180 * DEGTORAD ) totalRotation += 360 * DEGTORAD;
+  while ( totalRotation >  180 * DEGTORAD ) totalRotation -= 360 * DEGTORAD;
+  float desiredAngularVelocity = totalRotation * 60;
+  float change = 1 * DEGTORAD; //allow 1 degree rotation per time step
+  desiredAngularVelocity = fmin( change, fmax(-change, desiredAngularVelocity));
+  float impulse = body->GetInertia() * desiredAngularVelocity;
+  body->ApplyAngularImpulse( impulse );
         }
         void tiltforward(){
             //auto body_angle = body->GetAngle();
-            body->ApplyTorque(-4000);
+            //body->ApplyTorque(-4000);
+            if (abs(body->GetAngularVelocity()) > 2)
+    return;
+
+  //if (clockwise)
+    body->ApplyAngularImpulse(-150);
+  //else
+    //body->ApplyAngularImpulse(2000);
         }
 	
 	/* DESCRIPTION:
@@ -308,6 +329,8 @@ private:
 	float32 m_zeta;
 	float32 m_speed;
         size_t points;
+        
+        sf::Time timeSinceLastUpdate = sf::Time::Zero;
 };
 
 
