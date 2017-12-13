@@ -31,7 +31,7 @@ namespace {
     const int32 positionIterations = 6;
     const float y_points = -500;
     const float x_points = 400;
-    const int map_length = 500;
+    const int map_length = 5;
 }
 
 class Game : public Screen{
@@ -118,7 +118,8 @@ class Game : public Screen{
         }
         
         // Puts goal at the end of the map
-        objects.push_back(new Goal(&world, player, lastx, lasty));
+        auto goal = new Goal(&world, player, lastx, lasty);
+        objects.push_back(goal);
         
         std::stringstream ss;
         ss << "Points: " << 0;
@@ -199,7 +200,9 @@ class Game : public Screen{
                 obj->render(window);
             }
             //player->debugLog(std::cout);
-            
+            if(goal->getCollected() ) {
+                window.close();
+            }
             
             window.display();
         }
