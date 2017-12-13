@@ -40,20 +40,25 @@ public:
 		
 		b2PolygonShape polygonShape;
 		b2Vec2 vertices[6];
-		vertices[0].Set(-3.3f, -0.7f);
-		vertices[1].Set(3.3f, -0.7f);
-		vertices[2].Set(3.3f, 0.0f);
-		vertices[3].Set(1.5f, 1.0f);
-		vertices[4].Set(-1.5f, 1.0f);
-		vertices[5].Set(-3.3f, 0.0f);
+		vertices[0].Set(-3.8f, -2.0f);// -3.3f, -0.7f
+		vertices[1].Set(3.0f, -2.0f);// -3.3f, -0.7f
+		vertices[2].Set(2.9f, 0.0f);// 3.3f, 0.0f
+		vertices[3].Set(1.0f, 1.0f);// 1.5f, 1.0f
+		vertices[4].Set(-2.0f, 1.0f);// -1.5f, 1.0f
+		vertices[5].Set(-3.8f, 0.0f);// -3.3f, 0.0f
 		polygonShape.Set(vertices, 6);
 		
+                shape = B2toSFRenderer::PolygonToSFConvex(polygonShape);
+		bodytexture.loadFromFile("moto2.png");
+        	bodytexture.setSmooth(true);
+       		shape.setTexture(&bodytexture, true);
+                
 		b2CircleShape circle;
 		circle.m_radius = 1.3f;
                 
                 wheel1 = B2toSFRenderer::CircleToSFCircle(circle);
                 wheel2 = B2toSFRenderer::CircleToSFCircle(circle);
-		wheeltexture.loadFromFile("rock.png");
+		wheeltexture.loadFromFile("wheel.png");
         	wheeltexture.setSmooth(true);
        		wheel1.setTexture(&wheeltexture, true);
                 wheel2.setTexture(&wheeltexture, true);
@@ -72,7 +77,7 @@ public:
 		b2FixtureDef fd;
 		fd.shape = &circle;
 		fd.density = 2.0f;
-		fd.friction = 0.5f;
+		fd.friction = 2.0f;
 		fd.restitution = 0.1;
 		
 		bd.position.Set(-2.4f, 0.4f);
@@ -111,9 +116,10 @@ public:
                 WheelJointFront.localAnchorB.Set(0,0);//center of the circle
                 
                 WheelJointFront.motorSpeed = -1.0f;
-		WheelJointFront.maxMotorTorque = 500.0f;
-		WheelJointFront.enableMotor = true;
-		//WheelJointBack.frequencyHz = 4;
+		WheelJointFront.maxMotorTorque = 9500.0f;
+		//WheelJointFront.enableMotor = true;
+		
+                //WheelJointBack.frequencyHz = 4;
 		//WheelJointBack.dampingRatio = 0.1;
                 //b2PrismaticJoint aa;
                 
@@ -224,7 +230,7 @@ public:
 	}
 	void brake(){
             m_spring2->EnableMotor(true);
-                m_spring1->EnableMotor(true);
+            m_spring1->EnableMotor(true);
             m_spring1->SetMotorSpeed(0.0f);
             m_spring2->SetMotorSpeed(0.0f);
         }
@@ -239,18 +245,20 @@ public:
 	void accelerate(float32 change) // 1.0f
 	{
             float a;
-                m_spring2->EnableMotor(true);
+                //m_spring2->EnableMotor(true);
                 m_spring1->EnableMotor(true);
                 auto mspeed = m_spring1->GetMotorSpeed();
-                auto mspeed2 = m_spring2->GetMotorSpeed();
-		if ((change > 0 && mspeed < 20.0f && mspeed2 < 20.0f) || (change < 0 && mspeed > -20.0f && mspeed2 > -20.0f)){
+                //auto mspeed2 = m_spring2->GetMotorSpeed();
+		//if ((change > 0 && mspeed < 20.0f && mspeed2 < 20.0f) || (change < 0 && mspeed > -20.0f && mspeed2 > -20.0f)){
+                if ((change > 0 && mspeed < 20.0f) || (change < 0 && mspeed > -20.0f)){
 			m_spring1->SetMotorSpeed(mspeed-change);
-                        m_spring2->SetMotorSpeed(mspeed2-change);
+                        //m_spring2->SetMotorSpeed(mspeed2-change);
                 }
                 mspeed = m_spring1->GetMotorSpeed();
-                mspeed2 = m_spring2->GetMotorSpeed();
-                if ((mspeed>=20.0f && mspeed2>=20.0f) || (mspeed<= -20.0f && mspeed2<= -20.0f)){
-                    if (mspeed>=0.0f && mspeed2>=0.0f){
+                //mspeed2 = m_spring2->GetMotorSpeed();
+                //if ((mspeed>=20.0f && mspeed2>=20.0f) || (mspeed<= -20.0f && mspeed2<= -20.0f)){
+                if (mspeed>=20.0f || mspeed<= -20.0f){    
+                    if (mspeed>=0.0f){
                         a = -1;
                     }
                     else
@@ -261,7 +269,7 @@ public:
                     //m_spring1->EnableMotor(false);
                    
                     m_spring1->SetMotorSpeed(-20.0f*a);
-                    m_spring2->SetMotorSpeed(-20.0f*a);
+                    //m_spring2->SetMotorSpeed(-20.0f*a);
                 }
                 //else (mspeed<= -10.0f && mspeed2<= -10.0f){
                 //   m_spring1->SetMotorSpeed(10.0f);
@@ -281,16 +289,17 @@ public:
 	void decreaseSpeed(float32 speedDecrease)//2.0f
 	{
                 auto mspeed = m_spring1->GetMotorSpeed();
-		auto mspeed2 = m_spring2->GetMotorSpeed();
-		if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease && mspeed2 < 2*speedDecrease && mspeed2 > 2*speedDecrease)
+		//auto mspeed2 = m_spring2->GetMotorSpeed();
+		//if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease && mspeed2 < 2*speedDecrease && mspeed2 > 2*speedDecrease)
+                if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease)
 			stop();
-		if (mspeed > 0 || mspeed2 > 0){
+		if (mspeed > 0){
 			m_spring1->SetMotorSpeed(mspeed-speedDecrease);
-                        m_spring2->SetMotorSpeed(mspeed2-speedDecrease);
+                        //m_spring2->SetMotorSpeed(mspeed2-speedDecrease);
                 }
-		else if (mspeed < 0 || mspeed2 < 0){
+		else if (mspeed < 0){
 			m_spring1->SetMotorSpeed(mspeed+speedDecrease);
-			m_spring2->SetMotorSpeed(mspeed2+speedDecrease);
+			//m_spring2->SetMotorSpeed(mspeed2+speedDecrease);
                 }
 	}
         
