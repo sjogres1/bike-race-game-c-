@@ -53,7 +53,7 @@ public:
                 
                 wheel1 = B2toSFRenderer::CircleToSFCircle(circle);
                 wheel2 = B2toSFRenderer::CircleToSFCircle(circle);
-		wheeltexture.loadFromFile("wheel1.png");
+		wheeltexture.loadFromFile("rock.png");
         	wheeltexture.setSmooth(true);
        		wheel1.setTexture(&wheeltexture, true);
                 wheel2.setTexture(&wheeltexture, true);
@@ -64,15 +64,15 @@ public:
 		body = world->CreateBody(&bd);
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &polygonShape;
-		fixtureDef.density = 5.0f;
+		fixtureDef.density = 2.0f;
 		fixtureDef.friction = 0.3f;
 		fixtureDef.restitution = 0.1;
 		body->CreateFixture(&fixtureDef);
 
 		b2FixtureDef fd;
 		fd.shape = &circle;
-		fd.density = 5.0f;
-		fd.friction = 1.0f;
+		fd.density = 2.0f;
+		fd.friction = 0.5f;
 		fd.restitution = 0.1;
 		
 		bd.position.Set(-2.4f, 0.4f);
@@ -222,25 +222,51 @@ public:
 	{
 		accelerate(-2.0f);
 	}
-	
+	void brake(){
+            m_spring2->EnableMotor(true);
+                m_spring1->EnableMotor(true);
+            m_spring1->SetMotorSpeed(0.0f);
+            m_spring2->SetMotorSpeed(0.0f);
+        }
         void stop()
 	{
 		m_spring1->SetMotorSpeed(0.0f);
                 m_spring2->SetMotorSpeed(0.0f);
+                m_spring2->EnableMotor(false);
+                m_spring1->EnableMotor(false);
 	}
 	
 	void accelerate(float32 change) // 1.0f
 	{
+            float a;
+                m_spring2->EnableMotor(true);
+                m_spring1->EnableMotor(true);
                 auto mspeed = m_spring1->GetMotorSpeed();
                 auto mspeed2 = m_spring2->GetMotorSpeed();
-		if ((change > 0 && mspeed < 30.0f && mspeed2 < 30.0f) || (change < 0 && mspeed > -30.0f && mspeed2 > -30.0f)){
+		if ((change > 0 && mspeed < 20.0f && mspeed2 < 20.0f) || (change < 0 && mspeed > -20.0f && mspeed2 > -20.0f)){
 			m_spring1->SetMotorSpeed(mspeed-change);
                         m_spring2->SetMotorSpeed(mspeed2-change);
                 }
-                if ((m_spring1->GetMotorSpeed()>20.0f && m_spring2->GetMotorSpeed()>20.0f) || (m_spring1->GetMotorSpeed()< -20.0f && m_spring2->GetMotorSpeed()< -20.0f)){
-                    //(change*5);
-                    stop();
+                mspeed = m_spring1->GetMotorSpeed();
+                mspeed2 = m_spring2->GetMotorSpeed();
+                if ((mspeed>=20.0f && mspeed2>=20.0f) || (mspeed<= -20.0f && mspeed2<= -20.0f)){
+                    if (mspeed>=0.0f && mspeed2>=0.0f){
+                        a = -1;
+                    }
+                    else
+                        a = 1;
+                    //(change*5); 
+                    //decreaseSpeed(change*0.2);
+                    //m_spring2->EnableMotor(false);
+                    //m_spring1->EnableMotor(false);
+                   
+                    m_spring1->SetMotorSpeed(-20.0f*a);
+                    m_spring2->SetMotorSpeed(-20.0f*a);
                 }
+                //else (mspeed<= -10.0f && mspeed2<= -10.0f){
+                //   m_spring1->SetMotorSpeed(10.0f);
+                //    m_spring2->SetMotorSpeed(10.0f);
+                //}
             //float deltaTime = timeSinceLastUpdate.asSeconds();
             //if (m_wheel1->GetLinearVelocity().x > 500.0f)
             //    stop();
@@ -252,7 +278,7 @@ public:
 			
 	}
 	
-	void decreaseSpeed(float32 speedDecrease=2.0f)
+	void decreaseSpeed(float32 speedDecrease)//2.0f
 	{
                 auto mspeed = m_spring1->GetMotorSpeed();
 		auto mspeed2 = m_spring2->GetMotorSpeed();
@@ -270,29 +296,18 @@ public:
         
         void tiltback(){
             //auto body_angle = body->GetAngle();
-            float desiredAngle = 0;
+            //float desiredAngle = 0;
+            //body->ApplyTorque(4000);
+            if (abs(body->GetAngularVelocity()) > 2)
+                return;
             body->ApplyTorque(4000);
-            /*float bodyAngle = body->GetAngle();
-            float nextAngle = bodyAngle + body->GetAngularVelocity() / 60.0;
-  float totalRotation = desiredAngle - nextAngle;
-  while ( totalRotation < -180 * DEGTORAD ) totalRotation += 360 * DEGTORAD;
-  while ( totalRotation >  180 * DEGTORAD ) totalRotation -= 360 * DEGTORAD;
-  float desiredAngularVelocity = totalRotation * 60;
-  float change = 1 * DEGTORAD; //allow 1 degree rotation per time step
-  desiredAngularVelocity = fmin( change, fmax(-change, desiredAngularVelocity));
-  float impulse = body->GetInertia() * desiredAngularVelocity;
-  body->ApplyAngularImpulse( impulse );*/
         }
         void tiltforward(){
             //auto body_angle = body->GetAngle();
             //body->ApplyTorque(-4000);
             if (abs(body->GetAngularVelocity()) > 2)
-    return;
-
-  //if (clockwise)
-    body->ApplyAngularImpulse(-150);
-  //else
-    //body->ApplyAngularImpulse(2000);
+                return;
+            body->ApplyAngularImpulse(-150);
         }
         
 	
