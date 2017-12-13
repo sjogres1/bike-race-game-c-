@@ -18,7 +18,9 @@
       <in>GameObject.hpp</in>
       <in>Ground.hpp</in>
       <in>Interface.hpp</in>
+      <in>MainMenu.hpp</in>
       <in>Render.hpp</in>
+      <in>Screens.hpp</in>
       <in>main.cpp</in>
       <in>map.cpp</in>
       <in>menu.cpp</in>
