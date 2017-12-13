@@ -1,15 +1,9 @@
-/* 
- * File:   MainMenu.hpp
- * Author: ilkka
- *
- * Created on December 12, 2017, 10:15 AM
- */
-
 #ifndef MAINMENU_HPP
 #define MAINMENU_HPP
 
 #include <iostream>
 #include "Screens.hpp"
+#include "DEFINITIONS.hpp"
 
 class MainMenu : public Screen {
 
@@ -17,8 +11,9 @@ private:
     size_t position;
     std::vector<sf::Text*> options;
     sf::Texture texture;
-    sf::Text option_play;
+    sf::Text option_levels;
     sf::Text option_highscores;
+    sf::Text option_instructions;
     sf::Font font;
 
 public:
@@ -28,21 +23,29 @@ public:
     position = 0;
     font.loadFromFile("LemonMilk.otf"); 
 
-    option_play.setFont(font);
-    option_play.setCharacterSize(50);
-    option_play.setStyle(sf::Text::Bold);
-    option_play.setColor(sf::Color::White);
-    option_play.setPosition(400,520);
-    option_play.setString("NEW GAME"); 
-    options.push_back(&option_play);
+    option_levels.setFont(font);
+    option_levels.setCharacterSize(50);
+    option_levels.setStyle(sf::Text::Bold);
+    option_levels.setColor(sf::Color::White);
+    option_levels.setPosition(SCREEN_WIDTH/3, (SCREEN_HEIGHT/10)*3);
+    option_levels.setString("LEVELS"); 
+    options.push_back(&option_levels);
 
     option_highscores.setFont(font);
     option_highscores.setCharacterSize(50);
     option_highscores.setStyle(sf::Text::Bold);
     option_highscores.setColor(sf::Color::White);
-    option_highscores.setPosition(370,580);
+    option_highscores.setPosition(SCREEN_WIDTH/3, (SCREEN_HEIGHT/10)*5);
     option_highscores.setString("HIGH SCORES");  
     options.push_back(&option_highscores);
+    
+    option_instructions.setFont(font);
+    option_instructions.setCharacterSize(50);
+    option_instructions.setStyle(sf::Text::Bold);
+    option_instructions.setColor(sf::Color::White);
+    option_instructions.setPosition(SCREEN_WIDTH/3, (SCREEN_HEIGHT/10)*7);
+    option_instructions.setString("INSTRUCTIONS"); 
+    options.push_back(&option_instructions);
   }
 
     
@@ -81,7 +84,7 @@ public:
 
     sf::Event event;
     while (window.pollEvent(event)) {
-      if (event.type == sf::Event::KeyReleased)
+      if (event.type == sf::Event::KeyReleased){
         switch (event.key.code){
             
         case sf::Keyboard::Return:
@@ -90,6 +93,9 @@ public:
           } 
           if(position == 1) {
             return GAMESTATE_HIGHSCORES;
+          }
+          if(position == 2) {
+            return GAMESTATE_INSTRUCTIONS;
           }
 
         case sf::Keyboard::Escape:
@@ -107,7 +113,8 @@ public:
              position++;
            }
 
-           return GAMESTATE_MAINMENU;
+        return GAMESTATE_MAINMENU;
+        }
       }
     }
 
@@ -116,5 +123,5 @@ public:
 };
 
 
-#endif /* MAINMENU_HPP */
+#endif
 

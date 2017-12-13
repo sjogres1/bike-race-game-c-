@@ -2,7 +2,11 @@
 #include "Game.hpp"
 #include "MainMenu.hpp"
 #include "Screens.hpp"
+#include "HighScores.hpp"
+#include "LevelsMenu.hpp"
+#include "Instructions.hpp"
 #include <vector>
+#include "DEFINITIONS.hpp"
 
 int main(){
 
@@ -10,17 +14,26 @@ int main(){
     int screen = 0;
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
-    //TODO:fetch screen size from a separate file to unify
-    sf::RenderWindow window(sf::VideoMode(1024, 768), "Hillside Racing", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Hillside Racing", sf::Style::Default, settings);
 
     MainMenu mm;
     screens.push_back (&mm);
-
+    
+    LevelsMenu l;
+    screens.push_back(&l);
+    
+    HighScores hs;
+    screens.push_back(&hs);
+    
+    Instructions in;
+    screens.push_back(&in);
+    
     Game g;
     screens.push_back(&g);
+    
+
 
     while (screen >= 0) {
         screen = screens[screen]->open(window);
-        if(screen == GAMESTATE_GAME) {g.open(window);}
    }
 }
