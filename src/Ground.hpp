@@ -3,7 +3,11 @@
 
 #include "Box2DToSFML.hpp"
 #include "GameObject.hpp"
-//#include <Texture.hpp>
+#include <cstdlib>
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 
 
@@ -48,7 +52,7 @@ public:
                 auto curr = v;
                 if(++v == vertices.end()) break;
 		sf::ConvexShape shape;
-		
+
 		shape.setTexture(&texture);
 		shape.setTextureRect(sf::IntRect(10, 10, 100, 100));
                 shape.setPointCount(4);
@@ -59,37 +63,47 @@ public:
  		rt.draw(shape);
             }
         }
-        
-        std::list<std::pair<float, float>> generateGroundPoints(int difficulty, int length){
-		std::list<std::pair<float, float>> groundPoints;
-		std::pair<float, float> coordinatesAtSection;
-		std::pair<float, float> firstPair;
-		std::pair<float, float> lastPair;
-		int dice;
-		firstPair.first = -20;
-		firstPair.second = -10;
-		groundPoints.push_back(firstPair);
-		float r;
 
-		for(int section = 0; section <= length; section = section + 5)
+	std::list<std::pair<float, float>> generateGroundPoints(int difficulty, int length){
+		std::list<std::pair<float, float>> groundPoints;
+		std::pair<float, float> firstPoint;
+		std::pair<float, float> lastPoint;
+		firstPoint.first = -20;
+		firstPoint.second = -20;
+		groundPoints.push_back(firstPoint);
+		firstPoint.first = 0;
+		firstPoint.second = -20;
+		groundPoints.push_back(firstPoint);
+		float r;
+		std::pair<float, float> updatedPoint;
+		std::pair<float, float> creationVector;
+		creationVector.first = 0;
+		creationVector.second = 0;
+		float randomNumberX;
+		float randomNumberY;
+		int min = -1;
+		int max = 1;
+		difficulty = 1;
+
+		for(int count = 0; count <= length; ++count)
 		{
-			lastPair = groundPoints.back();
-			coordinatesAtSection.first = section;
-			r = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-			dice = rand() % 5;
-			if (dice == 1){
-				coordinatesAtSection.second = lastPair.second + r*difficulty;
+		    r = (1- (float)rand() / RAND_MAX) * 2;		
+		    randomNumberX = 1 - 2*((float) (rand()) / (RAND_MAX));//2 - rand () % 5;
+		    randomNumberY = 1 - 2*((float) (rand()) / (RAND_MAX));//2 - rand () % 5;
+		    lastPoint = groundPoints.back();
+		    creationVector.first = creationVector.first + randomNumberX*difficulty;
+		    creationVector.second = creationVector.second + randomNumberY*difficulty;
+		    updatedPoint.first = lastPoint.first + creationVector.first;
+		    updatedPoint.second = lastPoint.second + creationVector.second;
+		    if (updatedPoint.first < lastPoint.first){
+			updatedPoint.first = lastPoint.first + 1;
 			}
-			if (dice == 0){
-				coordinatesAtSection.second = lastPair.second - r*difficulty;
-			}
-			groundPoints.push_back(coordinatesAtSection);
+		    groundPoints.push_back(updatedPoint);
 		}
 		return groundPoints;
 	}
-	
-	
-	
+
+
 private:
 	std::vector<b2Vec2> vertices;
 	b2Body* groundBody;
