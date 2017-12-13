@@ -15,6 +15,7 @@
 #include <list>
 #include "Car.hpp"
 #include "Coin.hpp"
+#include "Screens.hpp"
 #include "GameObject.hpp"
 #include "Ground.hpp"
 
@@ -30,7 +31,7 @@ namespace {
         const float x_points = 400;
 }
 
-class Game {
+class Game : public Screen{
 public:
     Game() {
         
@@ -42,8 +43,7 @@ public:
     
 	
 
-    void open(void) {
-        sf::RenderWindow window(sf::VideoMode(WWidth, WHeight), "Hillside coin test", sf::Style::Default);
+    int open(sf::RenderWindow &window) {
         
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
@@ -56,8 +56,8 @@ public:
                 
  	
          
- 		sf::View view = window.getDefaultView();
- 		window.setView(view);
+ 	sf::View view = window.getDefaultView();
+ 	window.setView(view);
 
         sf::Texture texture;
         sf::Sprite background;
@@ -166,6 +166,8 @@ public:
 		
 			window.display();
 		}
+        //temporary solution
+        return -1;
     }
 	
 	
