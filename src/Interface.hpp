@@ -39,9 +39,33 @@ public:
                                         player->tiltforward();
                                         break;
 			}
-		}// else  {
-		//	player->decreaseSpeed();
-		//}
+		} else  {
+			player->decreaseSpeed();
+		}
+                if (event.type == sf::Event::KeyReleased) {
+			switch (event.key.code)//(event.key.code)
+			{
+                            case sf::Keyboard::Down:
+					player->stop();
+					break;
+					
+				case sf::Keyboard::Space:
+					player->stop();
+					break;
+					
+				case sf::Keyboard::Up:
+					player->stop();
+					break;
+
+				case sf::Keyboard::Left:
+                                        player->tiltback();
+                                        break;
+                                        
+                            	case sf::Keyboard::Right:
+                                        player->tiltforward();
+                                        break;
+                        }
+                }
 	}
 
 };

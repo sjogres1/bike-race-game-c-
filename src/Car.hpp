@@ -18,7 +18,6 @@
 #define RADTODEG 57.295779513082320876f
 
 #include "GameObject.hpp"
-#include "Box2DToSFML.hpp"
 
 
 //namespace {
@@ -66,15 +65,15 @@ public:
 		body = world->CreateBody(&bd);
 		b2FixtureDef fixtureDef;
 		fixtureDef.shape = &polygonShape;
-		fixtureDef.density = 1.0f;
+		fixtureDef.density = 5.0f;
 		fixtureDef.friction = 0.3f;
 		fixtureDef.restitution = 0.1;
 		body->CreateFixture(&fixtureDef);
 
 		b2FixtureDef fd;
 		fd.shape = &circle;
-		fd.density = 1.0f;
-		fd.friction = 5.0f;
+		fd.density = 5.0f;
+		fd.friction = 1.0f;
 		fd.restitution = 0.1;
 		
 		bd.position.Set(-2.4f, 0.4f);
@@ -217,7 +216,7 @@ public:
 	
 	void forward()
 	{
-		accelerate(4.0f);
+		accelerate(2.0f); //4.0f
 	}
 	
 	void backwards()
@@ -231,13 +230,17 @@ public:
                 m_spring2->SetMotorSpeed(0.0f);
 	}
 	
-	void accelerate(float32 change=1.0f)
+	void accelerate(float32 change) // 1.0f
 	{
                 auto mspeed = m_spring1->GetMotorSpeed();
                 auto mspeed2 = m_spring2->GetMotorSpeed();
-		if ((change > 0 && mspeed < 50.0f && mspeed2 < 50.0f) || (change < 0 && mspeed > -30.0f && mspeed2 > -30.0f)){
+		if ((change > 0 && mspeed < 30.0f && mspeed2 < 30.0f) || (change < 0 && mspeed > -30.0f && mspeed2 > -30.0f)){
 			m_spring1->SetMotorSpeed(mspeed-change);
                         m_spring2->SetMotorSpeed(mspeed2-change);
+                }
+                if ((m_spring1->GetMotorSpeed()>20.0f && m_spring2->GetMotorSpeed()>20.0f) || (m_spring1->GetMotorSpeed()< -20.0f && m_spring2->GetMotorSpeed()< -20.0f)){
+                    //(change*5);
+                    stop();
                 }
             //float deltaTime = timeSinceLastUpdate.asSeconds();
             //if (m_wheel1->GetLinearVelocity().x > 500.0f)
@@ -250,7 +253,7 @@ public:
 			
 	}
 	
-	void decreaseSpeed(float32 speedDecrease=1.0f)
+	void decreaseSpeed(float32 speedDecrease=2.0f)
 	{
                 auto mspeed = m_spring1->GetMotorSpeed();
 		auto mspeed2 = m_spring2->GetMotorSpeed();
@@ -270,7 +273,7 @@ public:
             //auto body_angle = body->GetAngle();
             float desiredAngle = 0;
             body->ApplyTorque(4000);
-            float bodyAngle = body->GetAngle();
+            /*float bodyAngle = body->GetAngle();
             float nextAngle = bodyAngle + body->GetAngularVelocity() / 60.0;
   float totalRotation = desiredAngle - nextAngle;
   while ( totalRotation < -180 * DEGTORAD ) totalRotation += 360 * DEGTORAD;
@@ -279,7 +282,7 @@ public:
   float change = 1 * DEGTORAD; //allow 1 degree rotation per time step
   desiredAngularVelocity = fmin( change, fmax(-change, desiredAngularVelocity));
   float impulse = body->GetInertia() * desiredAngularVelocity;
-  body->ApplyAngularImpulse( impulse );
+  body->ApplyAngularImpulse( impulse );*/
         }
         void tiltforward(){
             //auto body_angle = body->GetAngle();
@@ -292,6 +295,7 @@ public:
   //else
     //body->ApplyAngularImpulse(2000);
         }
+        
 	
 	/* DESCRIPTION:
 	 * Used for debugging player movement
