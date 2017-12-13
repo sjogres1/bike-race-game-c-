@@ -25,6 +25,8 @@ class Coin : public GameObject
 public:
     Coin(b2World* world, Player* player, double x, double y) { //  Player* p, removed
 	      		m_contacting = false;
+                        g_contacting = false;
+                        g_collected = false;
 	      		collected = false;
 	      		//player = p;
                         player1 = player;
@@ -35,6 +37,26 @@ public:
 			cointexture.loadFromFile("coin.png");
         		cointexture.setSmooth(true);
        			coin.setTexture(&cointexture, true);
+                        
+                       /* b2CircleShape circlegoal;
+                        circlegoal.m_radius = 1.0f;
+                        goal = B2toSFRenderer::CircleToSFCircle(circlegoal);
+                        goaltexture.loadFromFile("Goal.png");
+                        goaltexture.setSmooth(true);
+                        goal.setTexture(&goaltexture, true);
+                        
+                        
+                        b2FixtureDef fd_goal;
+                        fd_goal.shape = &circlegoal;
+                        fd_goal.density = 1.1f;
+                        fd_goal.isSensor = true;
+                        
+                        b2BodyDef bd_goal;
+                        bd_goal.position.Set(x,y);
+                        m_goal = world->CreateBody(&bd_goal);
+                        m_goal->CreateFixture(&fd_goal);
+                        m_goal->SetUserData(this);*/
+                        
 		
 			b2FixtureDef fd;
 			fd.shape = &circle;
@@ -51,6 +73,8 @@ public:
 	void render(sf::RenderTarget &rt) const
 	{
 		if(!collected) {rt.draw(coin);}
+                
+                //if(!g_collected) {rt.draw(goal);}
 	}
 	
 	
@@ -73,14 +97,20 @@ public:
 	void startContact() {m_contacting = true;}
   	void endContact() {m_contacting = false;}
 	
-	private:
-    		b2Body* m_coin;
-		sf::CircleShape coin;
-    		//float m_radius;
-    		bool m_contacting;
-    		bool collected;
-    		sf::Texture cointexture;
-    		Player* player1;
+private:
+        
+    	b2Body* m_coin;
+        b2Body* m_goal;
+	sf::CircleShape coin;
+        sf::CircleShape goal;    		//float m_radius;
+    	bool m_contacting;
+        bool g_contacting;
+
+        bool g_collected;
+        bool collected;
+        sf::Texture cointexture;
+        sf::Texture goaltexture;
+        Player* player1;
 
  };
  
