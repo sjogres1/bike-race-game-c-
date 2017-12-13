@@ -1,5 +1,6 @@
 #ifndef GROUND_HPP
 #define GROUND_HPP
+
 #include "Box2DToSFML.hpp"
 #include "GameObject.hpp"
 
@@ -10,40 +11,31 @@ class Ground : public GameObject
 public:
     
         Ground() { }
-	Ground(b2World* world, std::list <std::pair <float, float>> mapPoints)
-	//auto groundPoints = givenPoints;
-	{
+
+	void drawMap(b2World* world, std::list <std::pair <float, float>> mapPoints){
 		b2BodyDef ground;
-                ground.type = b2_staticBody;
+		ground.type = b2_staticBody;
 		groundBody = world->CreateBody(&ground);
-			
+
+		
 		for (auto const& pair : mapPoints) {
 			vertices.push_back(b2Vec2(pair.first, pair.second));
 		}
-		
-                
-                /*vertices[0].Set(-5.0f, -20.0f);
-                vertices[1].Set(430.0f, -20.0f);
-                vertices[2].Set(430.0f, -18.0f);
-                vertices[3].Set(-5.0f, -18.0f);*/
+
 
 		b2FixtureDef fd;
 		fd.density = 1.0f;
 		fd.friction = 0.6f;
-               // groundBody->CreateFixture(&fd);
 		
 		for (auto v = vertices.begin(); v != vertices.end();)
 		{
 			auto curr = v;
 			if (++v == vertices.end()) break;
-			//b2EdgeShape edgeShape;  // Changed to the next line
-                        b2PolygonShape edgeShape;
-			//edgeShape.Set(*curr, *v);
-                        edgeShape.SetAsEdge(*curr, *v);
+			b2PolygonShape edgeShape;
+			edgeShape.SetAsEdge(*curr, *v);
 			fd.shape = &edgeShape;
 			groundBody->CreateFixture(&fd);
 		}
-		
 	}
         
         void render(sf::RenderTarget &rt) const {
@@ -95,7 +87,6 @@ public:
 	
 private:
 	std::vector<b2Vec2> vertices;
-        //b2Vec2 vertices[4];
 	b2Body* groundBody;
 };
 #endif
