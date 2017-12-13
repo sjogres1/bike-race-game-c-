@@ -7,7 +7,7 @@
 // Renders polygonshapes and circleshapes to sfml graphics form
 
 namespace {
-    const float32 Pix_Per_M = 20.0f;
+	const float32 Pix_Per_M = 20.0f;
 }
  namespace B2toSFRenderer {
     sf::ConvexShape PolygonToSFConvex(b2PolygonShape& polygonShape)
