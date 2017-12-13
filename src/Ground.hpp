@@ -3,6 +3,7 @@
 
 #include "Box2DToSFML.hpp"
 #include "GameObject.hpp"
+//#include <Texture.hpp>
 
 
 
@@ -39,13 +40,18 @@ public:
 	}
         
         void render(sf::RenderTarget &rt) const {
-            float thickness = 1.0f * Pix_Per_M;
+	    float thickness = 2.0f * Pix_Per_M;
+	    sf::Texture texture;
+	    texture.loadFromFile("grass.png");
+	    //sf::Texture* texturePointer = texture;
             for (auto v = vertices.begin(); v!= vertices.end();)
             {
                 auto curr = v;
                 if(++v == vertices.end()) break;
-                sf::ConvexShape shape;
-                shape.setFillColor(sf::Color::Yellow);
+		sf::ConvexShape shape;
+		
+		shape.setTexture(&texture);
+		shape.setTextureRect(sf::IntRect(10, 10, 100, 100));
                 shape.setPointCount(4);
                 shape.setPoint(0, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)+thickness));
  		shape.setPoint(1, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)+thickness));
