@@ -16,6 +16,7 @@
 #include "Car.hpp"
 #include "Coin.hpp"
 #include "GameObject.hpp"
+#include "Ground.hpp"
 
 
 namespace {
@@ -109,8 +110,10 @@ public:
         b2World world(gravity, true);
         CoinListener cl;
         world.SetContactListener(&cl);
-        auto groundPoints = generateGroundPoints(3, 500);
-        Ground* ground = new Ground(&world, groundPoints);
+        //auto groundPoints = generateGroundPoints(3, 500);
+        Ground* ground = new Ground();
+        auto groundPoints = ground->generateGroundPoints(3,500);
+        ground = new Ground(&world, groundPoints);
         objects.push_back(ground);
         Player* player = new Player(&world);
         objects.push_back(player);
