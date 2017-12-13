@@ -18,11 +18,10 @@
 #define RADTODEG 57.295779513082320876f
 
 #include "GameObject.hpp"
+#include "Box2DToSFML.hpp"
 
 
-//namespace {
-//	const float32 Pix_Per_M = 20.0f;
-//}
+
 
 class Player : public GameObject
 {
