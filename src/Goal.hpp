@@ -60,7 +60,10 @@ class Goal : public GameObject
         }
         
         void contactGoal() {g_contacting = true;}
-        void endGoal() {g_contacting = false;}    
+        void endGoal() {g_contacting = false;}   
+        bool getCollected () {
+            return g_collected;
+        }
         
         
         private:
