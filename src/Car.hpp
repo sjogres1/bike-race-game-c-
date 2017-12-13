@@ -18,6 +18,7 @@
 #define RADTODEG 57.295779513082320876f
 
 #include "GameObject.hpp"
+#include "Box2DToSFML.hpp"
 
 
 //namespace {
