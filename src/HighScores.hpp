@@ -82,7 +82,7 @@ public:
         switch (event.key.code){
 
         case sf::Keyboard::Escape:
-           return GAMESTATE_MAINMENU;;
+           return GAMESTATE_MAINMENU;
            
         case sf::Keyboard::Up: 
           if(position > 0){

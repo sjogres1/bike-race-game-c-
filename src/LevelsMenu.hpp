@@ -99,7 +99,7 @@ public:
           }
 
         case sf::Keyboard::Escape:
-           return -1;
+           return GAMESTATE_MAINMENU;
            
         case sf::Keyboard::Up: 
             if(position > 0){

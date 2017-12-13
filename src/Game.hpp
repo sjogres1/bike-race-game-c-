@@ -201,7 +201,8 @@ class Game : public Screen{
             }
             //player->debugLog(std::cout);
             if(goal->getCollected() ) {
-                window.close();
+                //TODO set "camera" back to original position
+                return GAMESTATE_MAINMENU;
             }
             
             window.display();
