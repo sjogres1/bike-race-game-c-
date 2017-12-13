@@ -43,7 +43,6 @@ public:
 	    float thickness = 2.0f * Pix_Per_M;
 	    sf::Texture texture;
 	    texture.loadFromFile("grass.png");
-	    //sf::Texture* texturePointer = texture;
             for (auto v = vertices.begin(); v!= vertices.end();)
             {
                 auto curr = v;
