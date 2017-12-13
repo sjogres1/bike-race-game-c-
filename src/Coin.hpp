@@ -140,10 +140,29 @@ private:
     }
  };
  
- /*class Goal : public GameObject
+/*class Goal : public GameObject
  {
 public:
       Goal(b2World* world, Player* player, double x, double y) {
+    
+        b2CircleShape circlegoal;
+        circlegoal.m_radius = 1.0f;
+        goal = B2toSFRenderer::CircleToSFCircle(circlegoal);
+        goaltexture.loadFromFile("Goal.png");
+        goaltexture.setSmooth(true);
+        goal.setTexture(&goaltexture, true);
+                        
+                        
+        b2FixtureDef fd_goal;
+        fd_goal.shape = &circlegoal;
+        fd_goal.density = 1.1f;
+        fd_goal.isSensor = true;
+
+        b2BodyDef bd_goal;
+        bd_goal.position.Set(x,y);
+        m_goal = world->CreateBody(&bd_goal);
+        m_goal->CreateFixture(&fd_goal);
+        m_goal->SetUserData(this);
     
 }
      
