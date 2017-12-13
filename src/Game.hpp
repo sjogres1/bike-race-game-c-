@@ -29,6 +29,7 @@ namespace {
 	const int32 positionIterations = 6;
         const float y_points = -500;
         const float x_points = 400;
+        const int map_length = 500;
 }
 
 class Game : public Screen{
@@ -84,9 +85,15 @@ public:
         //window.setView(view);
         b2World world(gravity, true);
         CoinListener cl;
+       // GoalListener gl;
         world.SetContactListener(&cl);
+       // world.SetContactListener(&gl);
         Ground* ground = new Ground();
-        auto groundPoints = ground->generateGroundPoints(3,500);
+        auto groundPoints = ground->generateGroundPoints(3,map_length);
+        auto lastpoint = groundPoints.back();
+        auto lastx = lastpoint.first;
+        auto lasty = lastpoint.second;
+        std::cout << lastx << ":  " << lasty << std::endl;
         ground->drawMap(&world, groundPoints);
         objects.push_back(ground);
         Player* player = new Player(&world);
@@ -95,6 +102,8 @@ public:
         for (size_t i = 1; i < 75; i++) {
             objects.push_back(new Coin(&world, player, 10*i, -14));
         }
+        
+        //objects.push_back(new Goal(&world, player, lastx, lasty));
         
        std::stringstream ss;
         ss << "Points: " << 0;
@@ -145,7 +154,6 @@ public:
             ss.str(std::string());
             ss << "Points: " << player->getPoints();
             atext.setString(ss.str()); 
-            //window.draw(atext);
             atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);           
 
             view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
@@ -178,6 +186,7 @@ private:
         sf::ContextSettings setting;
         std::vector<GameObject*> objects;
         std::vector<Coin> coins;
+        //std::vector<Goal> goal;
        
 };
 
