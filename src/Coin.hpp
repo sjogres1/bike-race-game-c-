@@ -16,6 +16,7 @@
 
 #include "GameObject.hpp"
 #include "Car.hpp"
+#include "Box2DToSFML.hpp"
 
 class Coin : public GameObject
 {
