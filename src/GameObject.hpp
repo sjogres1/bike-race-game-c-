@@ -9,34 +9,9 @@
 #include <iostream>
 #include <iomanip>
 #include <list>
+//#include "Box2DToSFML.hpp"
 
-namespace {
-	const float32 Pix_Per_M = 20.0f;
-}
- namespace B2toSFRenderer {
- 	sf::ConvexShape PolygonToSFConvex(b2PolygonShape& polygonShape)
- 	{
- 		sf::ConvexShape shape;
- 		int32 vcount = polygonShape.GetVertexCount();
- 		shape.setPointCount(vcount);
- 		for (int32 i = 0; i < vcount; i++) {
- 			const b2Vec2 v = polygonShape.GetVertex(i);
- 			shape.setPoint(i, sf::Vector2f(v.x*Pix_Per_M,
- 										   v.y*Pix_Per_M*(-1)));
- 		}
- 		return shape;
- 	}
- 	
- 	sf::CircleShape CircleToSFCircle(b2CircleShape& circleShape)
- 	{
- 		sf::CircleShape shape;
- 		float32 radius = circleShape.m_radius;
- 		shape.setPointCount(16);
- 		shape.setRadius(radius * Pix_Per_M);
- 		shape.setOrigin(radius * Pix_Per_M, radius * Pix_Per_M);
- 		return shape;
- 	}
- }
+
 
 class GameObject
 {
@@ -48,7 +23,7 @@ public:
 };
 	
 
-class Ground : public GameObject
+/*class Ground : public GameObject
 {
 public:
 	Ground(b2World* world, std::list <std::pair <float, float>> mapPoints)
@@ -63,10 +38,7 @@ public:
 		}
 		
                 
-                /*vertices[0].Set(-5.0f, -20.0f);
-                vertices[1].Set(430.0f, -20.0f);
-                vertices[2].Set(430.0f, -18.0f);
-                vertices[3].Set(-5.0f, -18.0f);*/
+                
 
 		b2FixtureDef fd;
 		fd.density = 1.0f;
@@ -126,7 +98,7 @@ private:
 	std::vector<b2Vec2> vertices;
         //b2Vec2 vertices[4];
 	b2Body* groundBody;
-};
+};*/
 /*
 class Player : public GameObject
 {
