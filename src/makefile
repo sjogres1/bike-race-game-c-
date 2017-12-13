@@ -5,7 +5,11 @@
 # -- Compiler --
 CC=g++
 CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
+<<<<<<< HEAD
 SOURCES=main.cpp Game.hpp GameObject.hpp Interface.hpp Car.hpp Coin.hpp MainMenu.hpp HighScores.hpp DEFINITIONS.hpp Instructions.hpp Screens.hpp Ground.hpp
+=======
+SOURCES=main.cpp Game.hpp GameObject.hpp Interface.hpp Car.hpp Coin.hpp MainMenu.hpp Screens.hpp Ground.hpp Goal.hpp
+>>>>>>> cf4c6bad4adc0ce3dd20579a33b124ee7605e0eb
 OBJECTS=main.o
 EXECUTABLE=main
 INCLUDES =  

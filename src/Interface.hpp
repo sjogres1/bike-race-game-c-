@@ -24,7 +24,7 @@ public:
 					break;
 					
 				case sf::Keyboard::Space:
-					player->stop();
+					player->brake();
 					break;
 					
 				case sf::Keyboard::Up:
@@ -40,7 +40,7 @@ public:
                                         break;
 			}
 		} else  {
-			player->decreaseSpeed();
+			player->decreaseSpeed(1.0f);
 		}
                 if (event.type == sf::Event::KeyReleased) {
 			switch (event.key.code)//(event.key.code)
@@ -57,13 +57,13 @@ public:
 					player->stop();
 					break;
 
-				case sf::Keyboard::Left:
-                                        player->tiltback();
-                                        break;
+				//case sf::Keyboard::Left:
+                                //        player->tiltback();
+                                //        break;
                                         
-                            	case sf::Keyboard::Right:
-                                        player->tiltforward();
-                                        break;
+                            	//case sf::Keyboard::Right:
+                                //        player->tiltforward();
+                                //        break;
                         }
                 }
 	}
