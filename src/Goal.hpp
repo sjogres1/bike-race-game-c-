@@ -16,7 +16,7 @@ class Goal : public GameObject
         player2 = player;
         
         b2CircleShape circlegoal;
-        circlegoal.m_radius = 1.0f;
+        circlegoal.m_radius = 6.0f;
         goal = B2toSFRenderer::CircleToSFCircle(circlegoal);
         goaltexture.loadFromFile("Goal.png");
         goaltexture.setSmooth(true);
@@ -29,7 +29,7 @@ class Goal : public GameObject
         fd_goal.isSensor = true;
         
         b2BodyDef bd_goal;
-        bd_goal.position.Set(x,y);
+        bd_goal.position.Set(x+8,y);
         m_goal = world->CreateBody(&bd_goal);
         m_goal->CreateFixture(&fd_goal);
         m_goal->SetUserData(this);
@@ -48,6 +48,7 @@ class Goal : public GameObject
             if (g_contacting) {
                 m_goal->GetWorld()->DestroyBody(m_goal);
                 g_collected = true;
+                
                 
                 
             }
