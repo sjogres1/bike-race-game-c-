@@ -73,7 +73,7 @@ public:
 		firstPoint.first = -20;
 		firstPoint.second = -20;
 		groundPoints.push_back(firstPoint);
-		firstPoint.first = 5;
+		firstPoint.first = 0;
 		firstPoint.second = -20;
 		groundPoints.push_back(firstPoint);
 		std::pair<float, float> updatedPoint;
@@ -81,9 +81,10 @@ public:
 		creationVector.first = 0;
 		creationVector.second = 0;
 		double randomNumberY;
-		difficulty = 1;
+		difficulty = 0.1;
 		srand(time(NULL));
 		std::default_random_engine generator;
+		generator.seed(time(NULL));
 		std::normal_distribution<double> distribution(difficulty, 1.0);
 		float k = 0.001;
 		float friction = 0.2;
@@ -91,7 +92,7 @@ public:
 
 		for(int count = 0; count <= length; ++count)
 		{	
-		    randomNumberY =  1 - 2*((float) rand() / RAND_MAX); //distribution(generator);
+		    randomNumberY = distribution(generator);
 		    lastPoint = groundPoints.back();
 		    creationVector.second = creationVector.second + randomNumberY*difficulty;
 		    frictionForce = -creationVector.second*friction;
