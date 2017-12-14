@@ -44,7 +44,7 @@ public:
 			groundBody->CreateFixture(&fd);
 		}
 	}
-        
+
         void render(sf::RenderTarget &rt) const {
 	    float thickness = 2.0f * Pix_Per_M;
 	    sf::Texture texture;
@@ -56,7 +56,7 @@ public:
 		sf::ConvexShape shape;
 
 		shape.setTexture(&texture);
-		shape.setTextureRect(sf::IntRect(10, 10, 100, 100));
+		shape.setTextureRect(sf::IntRect(10, 10, 10, 70));
                 shape.setPointCount(4);
                 shape.setPoint(0, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)+thickness));
  		shape.setPoint(1, sf::Vector2f(v->x*Pix_Per_M, v->y*Pix_Per_M*(-1)+thickness));
@@ -64,32 +64,34 @@ public:
  		shape.setPoint(3, sf::Vector2f(curr->x*Pix_Per_M, curr->y*Pix_Per_M*(-1)));
  		rt.draw(shape);
             }
-        }
+	}
+
 
 	std::list<std::pair<float, float>> generateGroundPoints(float difficulty, int length){
 		std::list<std::pair<float, float>> groundPoints;
-		std::pair<float, float> firstPoint;
 		std::pair<float, float> lastPoint;
-		firstPoint.first = -20;
-		firstPoint.second = -20;
-		groundPoints.push_back(firstPoint);
-		firstPoint.first = 0;
-		firstPoint.second = -20;
-		groundPoints.push_back(firstPoint);
+		std::pair<float, float> thisPoint;
 		std::pair<float, float> updatedPoint;
 		std::pair<float, float> creationVector;
 		creationVector.first = 0;
 		creationVector.second = 0;
 		double randomNumberY;
+		float k = 0.001;
+		float friction = 0.2;
+		float frictionForce;
 		srand(time(NULL));
 		std::default_random_engine generator;
 		generator.seed(time(NULL));
 		std::normal_distribution<double> distribution(difficulty, 1.0);
-		float k = 0.001;
-		float friction = 0.2;
-		float frictionForce;
+		
+		for (int count = -10; count <= 5; ++count){
+			thisPoint.first = count;
+			thisPoint.second = 0;
+			groundPoints.push_back(thisPoint);
+		}
 
-		for(int count = 0; count <= length; ++count)
+
+		for(int count = 6; count <= length; ++count)
 		{	
 		    randomNumberY = distribution(generator);
 		    lastPoint = groundPoints.back();
@@ -100,7 +102,7 @@ public:
 		    updatedPoint.second = lastPoint.second + creationVector.second;
 		    groundPoints.push_back(updatedPoint);
 		}
-		
+
 		return groundPoints;
 	}
 
