@@ -51,7 +51,7 @@ public:
 
     
 
-  int open(sf::RenderWindow &window)  {
+  int open(sf::RenderWindow &window, int screen)  {
 
     while (window.isOpen()) {
         int process = processEvents(window);    
@@ -89,13 +89,13 @@ public:
             
         case sf::Keyboard::Return:
           if(position == 0) {
-            return GAMESTATE_GAME;
+            return GAME_DIFFICULTY_EASY;
           } 
           if(position == 1) {
-            return GAMESTATE_MAINMENU;
+            return GAME_DIFFICULTY_NORMAL;
           }
           if(position == 2) {
-            return GAMESTATE_MAINMENU;
+            return GAME_DIFFICULTY_HARD;
           }
 
         case sf::Keyboard::Escape:

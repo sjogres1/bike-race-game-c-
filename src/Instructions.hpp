@@ -37,7 +37,7 @@ public:
 
     
 
-  int open(sf::RenderWindow &window)  {
+  int open(sf::RenderWindow &window, int screen)  {
 
     while (window.isOpen()) {
         int process = processEvents(window);    

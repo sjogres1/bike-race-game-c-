@@ -36,8 +36,9 @@ namespace {
     const int32 positionIterations = 6;
     const float y_points = -500;
     const float x_points = 400;
-    const int map_length = 200;
 
+    float difficulty = 0;
+    const int map_length = 200;
 }
 
 
@@ -53,7 +54,16 @@ class Game : public Screen{
     }
     
     
-    int open(sf::RenderWindow &window) {
+    
+    
+    int open(sf::RenderWindow &window, int screen) {
+
+        if(screen == 5)
+            difficulty =0.1;
+        if(screen == 6)
+            difficulty =0.5;
+        if(screen == 7)
+            difficulty =1;
         
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
@@ -91,7 +101,7 @@ class Game : public Screen{
         
         // Sets up map terrain and generates a randomgenerated map
         Ground* ground = new Ground();
-        auto groundPoints = ground->generateGroundPoints(0.1 ,map_length);
+        auto groundPoints = ground->generateGroundPoints(difficulty ,map_length);
         
         // Draws map, pushes objects to the map and the player to the map
         ground->drawMap(&world, groundPoints);
