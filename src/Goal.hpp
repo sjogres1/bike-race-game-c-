@@ -3,7 +3,7 @@
 #include "Box2DToSFML.hpp"
 #include "GameObject.hpp"
 #include "Car.hpp"
-#include <unistd.h>
+
 
 
 
@@ -40,20 +40,14 @@ class Goal : public GameObject
         void render(sf::RenderTarget &rt) const
         {
             if(!g_collected) {rt.draw(goal);}
-            
-            //if(!g_collected) {rt.draw(goal);}
         }
         
         void update()
         {
             if (g_contacting) {
-                usleep(1000000);
-                usleep(1000000);
+                
                 //m_goal->GetWorld()->DestroyBody(m_goal);
                 g_collected = true;
-                player2->increasePoints(50);
-                
-                
                 
             }
             
