@@ -81,7 +81,6 @@ public:
 		creationVector.first = 0;
 		creationVector.second = 0;
 		double randomNumberY;
-		difficulty = 0.1;
 		srand(time(NULL));
 		std::default_random_engine generator;
 		generator.seed(time(NULL));

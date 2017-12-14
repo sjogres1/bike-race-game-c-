@@ -97,7 +97,7 @@ class Game : public Screen{
         
         // Sets up map terrain and generates a randomgenerated map
         Ground* ground = new Ground();
-        auto groundPoints = ground->generateGroundPoints(3,map_length);
+        auto groundPoints = ground->generateGroundPoints(0.1 ,map_length);
         
         // Draws map, pushes objects to the map and the player to the map
         ground->drawMap(&world, groundPoints);
