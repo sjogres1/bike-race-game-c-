@@ -60,7 +60,7 @@ class Coin : public GameObject
         if (m_contacting) {
             m_coin->GetWorld()->DestroyBody(m_coin);
             collected = true;
-            player1->increasePoints();
+            player1->increasePoints(2);
             
         }
         
