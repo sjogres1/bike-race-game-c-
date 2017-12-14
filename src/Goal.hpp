@@ -36,46 +36,44 @@ class Goal : public GameObject
         m_goal->SetUserData(this);
         
     }
-        
-        void render(sf::RenderTarget &rt) const
-        {
-            if(!g_collected) {rt.draw(goal);}
-        }
-        
-        void update()
-        {
-            if (g_contacting) {
-                
-                //m_goal->GetWorld()->DestroyBody(m_goal);
-                g_collected = true;
-                
-            }
-            
-            goal.setOrigin(goal.getRadius(), goal.getRadius());
-            goal.setPosition((m_goal->GetPosition().x )*Pix_Per_M,
-                    (m_goal->GetPosition().y)*Pix_Per_M*(-1));
-            
-        }
-        
-        void contactGoal() {g_contacting = true;}
-        void endGoal() {g_contacting = false;}   
-        bool getCollected () {
-            return g_collected;
-        }
-        
-        
-        private:
-        
-        b2Body* m_goal;
-        sf::CircleShape goal;
-        bool g_contacting;
-        bool g_collected;
-        sf::Texture goaltexture;
-        Player* player2;
-        
-    };
     
-    class GoalListener : public b2ContactListener {
+    void render(sf::RenderTarget &rt) const
+    {
+        if(!g_collected) {rt.draw(goal);}
+    }
+    
+    void update()
+    {
+        if (g_contacting) 
+            g_collected = true;
+            
+        
+        
+        goal.setOrigin(goal.getRadius(), goal.getRadius());
+        goal.setPosition((m_goal->GetPosition().x )*Pix_Per_M,
+                (m_goal->GetPosition().y)*Pix_Per_M*(-1));
+        
+    }
+    
+    void contactGoal() {g_contacting = true;}
+    void endGoal() {g_contacting = false;}   
+    bool getCollected () {
+        return g_collected;
+    }
+    
+    
+    private:
+    
+    b2Body* m_goal;
+    sf::CircleShape goal;
+    bool g_contacting;
+    bool g_collected;
+    sf::Texture goaltexture;
+    Player* player2;
+    
+};
+
+class GoalListener : public b2ContactListener {
     void BeginContact(b2Contact* contact) {
         
         void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();

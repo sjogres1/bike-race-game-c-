@@ -21,7 +21,7 @@
 #include "Ground.hpp"
 #include "Goal.hpp"
 #include "PointsSpeedClock.hpp"
-#include <SFML/OpenGL.hpp>
+//#include <SFML/OpenGL.hpp>
 #include "DEFINITIONS.hpp"
 #include <unistd.h>
 
@@ -36,11 +36,10 @@ namespace {
     const int32 positionIterations = 6;
     const float y_points = -500;
     const float x_points = 400;
-    
+    //int goal_points = 0;
     float difficulty = 0;
-    const int map_length = 200;
+    int map_length = 200;
 }
-
 
 
 class Game : public Screen{
@@ -54,16 +53,25 @@ class Game : public Screen{
     }
     
     
-    
-    
     int open(sf::RenderWindow &window, int screen) {
         
-        if(screen == 5)
-            difficulty =0.1;
-        if(screen == 6)
-            difficulty =0.5;
-        if(screen == 7)
+        if(screen == 5){
+            difficulty =0.9;
+            map_length=400;
+            //goal_points=50;
+        }
+        if(screen == 6){
+            difficulty =0.8;
+            map_length = 500;
+            //goal_points=100;
+        }
+        
+        if(screen == 7){
             difficulty =1;
+            map_length=650;
+            //goal_points=200;
+            
+        }
         
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
@@ -74,7 +82,6 @@ class Game : public Screen{
         
  	sf::View view = window.getDefaultView();
  	window.setView(view);
-        
         
         // Creates background for the game
         int counter = 0;
@@ -112,11 +119,6 @@ class Game : public Screen{
         // Creates text for points, speed and time spent
         PointsSpeedClock psc(player);
         
-        // Saves the last point of the map, so that we can put the goal there
-        auto lastpoint = groundPoints.back();
-        auto lastx = lastpoint.first;
-        auto lasty = lastpoint.second;
-        
         // Saves terrain shapes, so that coins can be drawn smartly around the map
         std::vector<float> coinPointsX = {};
         std::vector<float> coinPointsY = {};
@@ -125,13 +127,16 @@ class Game : public Screen{
             coinPointsX.push_back(i->first);
         }
         
-        
         // Puts all the coins in the map
         for (size_t i = 1; i < groundPoints.size(); i++) {
             if( !(i % rand() % 5)) {
                 objects.push_back(new Coin(&world, player, coinPointsX[i], coinPointsY[i] + 2 + rand() % 8));
             }
         }
+        // Saves the last point of the map, so that we can put the goal there
+        auto lastpoint = groundPoints.back();
+        auto lastx = lastpoint.first;
+        auto lasty = lastpoint.second;
         
         // Puts goal at the end of the map
         auto goal = new Goal(&world, player, lastx, lasty);
@@ -167,7 +172,7 @@ class Game : public Screen{
             window.clear();
             //Set Background to follow player
             window.setView(window.getDefaultView());
-            
+            // Puts background in the center of the screen, so that it looks cool
             bgx = player->getPosition().x*20*BGSPEED;
             bgy = player->getPosition().y*20*BGSPEED;
             if (bgx<0) bgx=0;
@@ -186,13 +191,14 @@ class Game : public Screen{
                 obj->update();
                 obj->render(window);
             }
+            // checks if goal is reached
             if(goal->getCollected() ) {
+                player->increasePoints(50);
                 psc.update();
                 psc.getFinish();
                 counter++;
-                player->increasePoints(50);
+                
             }
-            
             window.setView(window.getDefaultView());
             psc.update();
             window.draw(psc);
@@ -218,14 +224,12 @@ class Game : public Screen{
         return -1;
     }
     
-    
     private:
     sf::RenderWindow window;
     sf::ContextSettings settings;
     sf::Clock clock;
     sf::ContextSettings setting;
     std::vector<GameObject*> objects;
-    
     
 };
 
