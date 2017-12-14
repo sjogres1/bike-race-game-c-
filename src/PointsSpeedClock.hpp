@@ -46,6 +46,7 @@ class PointsSpeedClock : public sf::Drawable {
    /* bikespeed_ss.str("");
     bikespeed_ss << "Speed: " << std::fixed << std::setprecision(0) << std::abs(player->getVelocity());
     bikespeed_text.setString(bikespeed_ss.str()); */
+    
     start = std::clock()/divide;
     clock_ss.str("");
     clock_ss << "Time: " << start; 
