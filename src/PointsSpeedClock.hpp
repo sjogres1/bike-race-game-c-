@@ -12,6 +12,7 @@ class PointsSpeedClock : public sf::Drawable {
     PointsSpeedClock(Player* player) {
         player3 = player;
         psc_font.loadFromFile("LemonMilk.otf"); 
+        finish_count=0;
         
         // Set parameters for scoretext
         scoretext.setFont(psc_font);
@@ -22,10 +23,10 @@ class PointsSpeedClock : public sf::Drawable {
         
         //Set parameters for speedtext
         speedtext.setFont(psc_font);
-        speedtext.setCharacterSize(25);
+        speedtext.setCharacterSize(40);
         speedtext.setStyle(sf::Text::Bold);
-        speedtext.setColor(sf::Color::White);
-        speedtext.setPosition(0,40);
+        speedtext.setColor(sf::Color::Magenta);
+        speedtext.setPosition(200,40);
         
         //Set parameters for clock
         clocktext.setFont(psc_font);
@@ -40,9 +41,9 @@ class PointsSpeedClock : public sf::Drawable {
         score_ss << "Points " << player3->getPoints();
         scoretext.setString(score_ss.str()); 
         
-        /* bikespeed_ss.str("");
-         bikespeed_ss << "Speed: " << std::fixed << std::setprecision(0) << std::abs(player->getVelocity());
-         bikespeed_text.setString(bikespeed_ss.str()); */
+        bikespeed_ss.str("");
+        bikespeed_ss << "CONGRATULATIONS, YOU FINISHED :))!";
+        speedtext.setString(bikespeed_ss.str()); 
         
         start = std::clock()/divide;
         clock_ss.str("");
@@ -52,14 +53,18 @@ class PointsSpeedClock : public sf::Drawable {
     
     void draw(sf::RenderTarget& target, sf::RenderStates states) const {
         target.draw(scoretext);
-        //target.draw(speedtext);
         target.draw(clocktext);
+        if(finish_count == 1){
+            target.draw(speedtext);
+        }
+        
     }
-    int getClock() {
-        return start;
+    void getFinish() {
+        finish_count =1;
     }
     
     private:
+    int finish_count;
     double divide = 1000000;
     std::clock_t start;
     sf::Font psc_font;
