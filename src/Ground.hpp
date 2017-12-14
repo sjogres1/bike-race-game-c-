@@ -7,6 +7,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <random>
+#include <ctime>
 
 
 
@@ -64,42 +66,44 @@ public:
             }
         }
 
-	std::list<std::pair<float, float>> generateGroundPoints(int difficulty, int length){
+	std::list<std::pair<float, float>> generateGroundPoints(float difficulty, int length){
 		std::list<std::pair<float, float>> groundPoints;
 		std::pair<float, float> firstPoint;
 		std::pair<float, float> lastPoint;
 		firstPoint.first = -20;
 		firstPoint.second = -20;
 		groundPoints.push_back(firstPoint);
-		firstPoint.first = 0;
+		firstPoint.first = 5;
 		firstPoint.second = -20;
 		groundPoints.push_back(firstPoint);
-		float r;
 		std::pair<float, float> updatedPoint;
 		std::pair<float, float> creationVector;
 		creationVector.first = 0;
 		creationVector.second = 0;
-		float randomNumberX;
-		float randomNumberY;
-		int min = -1;
-		int max = 1;
-		difficulty = 1;
+		double randomNumberY;
+		difficulty = 0.1;
+		srand(time(NULL));
+		std::default_random_engine generator;
+		std::normal_distribution<double> distribution(0.0, 1.0);
 
 		for(int count = 0; count <= length; ++count)
-		{
-		    r = (1- (float)rand() / RAND_MAX) * 2;		
-		    randomNumberX = 1 - 2*((float) (rand()) / (RAND_MAX));//2 - rand () % 5;
-		    randomNumberY = 1 - 2*((float) (rand()) / (RAND_MAX));//2 - rand () % 5;
+		{	
+		    randomNumberY = distribution(generator);
 		    lastPoint = groundPoints.back();
-		    creationVector.first = creationVector.first + randomNumberX*difficulty;
 		    creationVector.second = creationVector.second + randomNumberY*difficulty;
-		    updatedPoint.first = lastPoint.first + creationVector.first;
+		    updatedPoint.first = count;
 		    updatedPoint.second = lastPoint.second + creationVector.second;
-		    if (updatedPoint.first < lastPoint.first){
-			updatedPoint.first = lastPoint.first + 1;
+			if (updatedPoint.second < -500*difficulty){
+			    updatedPoint.second = lastPoint.second;
+			    creationVector.second = lastPoint.second + 0.1;
+			}
+			if (updatedPoint.second > 500*difficulty){
+				updatedPoint.second = lastPoint.second;
+				creationVector.second = lastPoint.second - 0.1;
 			}
 		    groundPoints.push_back(updatedPoint);
 		}
+		
 		return groundPoints;
 	}
 
