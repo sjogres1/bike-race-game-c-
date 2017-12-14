@@ -14,13 +14,19 @@
 #define GAMESTATE_LEVELS 1
 #define GAMESTATE_HIGHSCORES 2
 #define GAMESTATE_INSTRUCTIONS 3
-#define GAMESTATE_GAME 4
+//#define GAMESTATE_GAME 4
+
+
+#define GAME_DIFFICULTY_EASY 4
+#define GAME_DIFFICULTY_NORMAL 5
+#define GAME_DIFFICULTY_HARD 6
 
 
 class Screen{
 
 public :
-    virtual int open(sf::RenderWindow &window) = 0;
+    virtual int open(sf::RenderWindow &window, int) = 0;
+    //virtual int run(sf::RenderWindow &window, float) = 0;
 };
 
 

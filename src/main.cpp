@@ -7,6 +7,7 @@
 #include "Instructions.hpp"
 #include <vector>
 #include "DEFINITIONS.hpp"
+#include <iostream>
 
 int main(){
 
@@ -28,12 +29,19 @@ int main(){
     Instructions in;
     screens.push_back(&in);
     
-    Game g;
-    screens.push_back(&g);
+    Game g1;
+    screens.push_back(&g1);
+    
+    Game g2;
+    screens.push_back(&g2);
+    
+    Game g3;
+    screens.push_back(&g3);
     
 
 
     while (screen >= 0) {
-        screen = screens[screen]->open(window);
+        //std::cout << screen;
+        screen = screens[screen]->open(window, screen);
    }
 }
