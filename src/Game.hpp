@@ -23,6 +23,7 @@
 #include "PointsSpeedClock.hpp"
 #include <SFML/OpenGL.hpp>
 #include "DEFINITIONS.hpp"
+#include <unistd.h>
 
 
 
@@ -66,7 +67,7 @@ class Game : public Screen{
         
         
         // Creates background for the game
-        
+        int counter = 0;
         sf::Texture background;
         sf::RectangleShape bg;
         float bgx, bgy;
@@ -151,6 +152,7 @@ class Game : public Screen{
                 world.Step(timeStep, velocityIterations, positionIterations);
                 accumulator -= timeStep;
             }
+          
             
             window.clear();
             //Set Background to follow player
@@ -174,6 +176,10 @@ class Game : public Screen{
                 obj->update();
                 obj->render(window);
             }
+              if(goal->getCollected() ) {
+                  counter++;
+                player->increasePoints(50);
+            }
           
             window.setView(window.getDefaultView());
             psc.update();
@@ -181,12 +187,17 @@ class Game : public Screen{
             
             //player->debugLog(std::cout);
             if(goal->getCollected() ) {
+                if(counter > 1){
+                usleep(1000000);
+                usleep(1000000);
+                usleep(1000000);
                 //TODO set "camera" back to original position
                 window.clear();
                 objects.clear();
                 window.setView(window.getDefaultView());
                 window.setSize(sf::Vector2u(SCREEN_WIDTH, SCREEN_HEIGHT));
                 return GAMESTATE_MAINMENU;
+                }
             }
             
             window.display();
