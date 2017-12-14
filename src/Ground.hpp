@@ -81,26 +81,23 @@ public:
 		creationVector.first = 0;
 		creationVector.second = 0;
 		double randomNumberY;
-		difficulty = 0.1;
+		difficulty = 1;
 		srand(time(NULL));
 		std::default_random_engine generator;
-		std::normal_distribution<double> distribution(0.0, 1.0);
+		std::normal_distribution<double> distribution(difficulty, 1.0);
+		float k = 0.001;
+		float friction = 0.2;
+		float frictionForce;
 
 		for(int count = 0; count <= length; ++count)
 		{	
-		    randomNumberY = distribution(generator);
+		    randomNumberY =  1 - 2*((float) rand() / RAND_MAX); //distribution(generator);
 		    lastPoint = groundPoints.back();
 		    creationVector.second = creationVector.second + randomNumberY*difficulty;
+		    frictionForce = -creationVector.second*friction;
+		    creationVector.second = (creationVector.second) - k*(lastPoint.second+20) + frictionForce;
 		    updatedPoint.first = count;
 		    updatedPoint.second = lastPoint.second + creationVector.second;
-			if (updatedPoint.second < -500*difficulty){
-			    updatedPoint.second = lastPoint.second;
-			    creationVector.second = lastPoint.second + 0.1;
-			}
-			if (updatedPoint.second > 500*difficulty){
-				updatedPoint.second = lastPoint.second;
-				creationVector.second = lastPoint.second - 0.1;
-			}
 		    groundPoints.push_back(updatedPoint);
 		}
 		
@@ -113,3 +110,5 @@ private:
 	b2Body* groundBody;
 };
 #endif
+
+
