@@ -8,13 +8,10 @@ class PointsSpeedClock : public sf::Drawable {
     
     public:
     
-        
+    
     PointsSpeedClock(Player* player) {
         player3 = player;
-        psc_font.loadFromFile("LemonMilk.otf");
-        const float y_points = -500;
-        const float x_points = 400;
-        
+        psc_font.loadFromFile("LemonMilk.otf"); 
         
         // Set parameters for scoretext
         scoretext.setFont(psc_font);
@@ -39,25 +36,28 @@ class PointsSpeedClock : public sf::Drawable {
     }
     
     void update() {
-    score_ss.str("");
-    score_ss << "Points " << player3->getPoints();
-    scoretext.setString(score_ss.str()); 
-
-   /* bikespeed_ss.str("");
-    bikespeed_ss << "Speed: " << std::fixed << std::setprecision(0) << std::abs(player->getVelocity());
-    bikespeed_text.setString(bikespeed_ss.str()); */
+        score_ss.str("");
+        score_ss << "Points " << player3->getPoints();
+        scoretext.setString(score_ss.str()); 
+        
+        /* bikespeed_ss.str("");
+         bikespeed_ss << "Speed: " << std::fixed << std::setprecision(0) << std::abs(player->getVelocity());
+         bikespeed_text.setString(bikespeed_ss.str()); */
+        
+        start = std::clock()/divide;
+        clock_ss.str("");
+        clock_ss << "Time: " << start; 
+        clocktext.setString(clock_ss.str());
+    }
     
-    start = std::clock()/divide;
-    clock_ss.str("");
-    clock_ss << "Time: " << start; 
-    clocktext.setString(clock_ss.str());
-  }
-
-  void draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    target.draw(scoretext);
-    //target.draw(speedtext);
-    target.draw(clocktext);
-  }
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const {
+        target.draw(scoretext);
+        //target.draw(speedtext);
+        target.draw(clocktext);
+    }
+    int getClock() {
+        return start;
+    }
     
     private:
     double divide = 1000000;
