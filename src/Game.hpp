@@ -20,6 +20,7 @@
 #include "GameObject.hpp"
 #include "Ground.hpp"
 #include "Goal.hpp"
+#include "DEFINITIONS.hpp"
 
 
 namespace {
@@ -202,6 +203,10 @@ class Game : public Screen{
             //player->debugLog(std::cout);
             if(goal->getCollected() ) {
                 //TODO set "camera" back to original position
+                window.clear();
+                objects.clear();
+                window.setView(window.getDefaultView());
+                window.setSize(sf::Vector2u(SCREEN_WIDTH, SCREEN_HEIGHT));
                 return GAMESTATE_MAINMENU;
             }
             
