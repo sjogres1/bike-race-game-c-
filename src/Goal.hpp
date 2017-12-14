@@ -48,6 +48,7 @@ class Goal : public GameObject
             if (g_contacting) {
                 m_goal->GetWorld()->DestroyBody(m_goal);
                 g_collected = true;
+                player2->increasePoints(50);
                 
                 
                 
