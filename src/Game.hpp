@@ -35,8 +35,9 @@ namespace {
     const int32 positionIterations = 6;
     const float y_points = -500;
     const float x_points = 400;
-    const int map_length = 40;
+
     float difficulty = 0;
+    const int map_length = 200;
 }
 
 
@@ -54,7 +55,6 @@ class Game : public Screen{
     
     
     
-    
     int open(sf::RenderWindow &window, int screen) {
 
         if(screen == 5)
@@ -63,7 +63,6 @@ class Game : public Screen{
             difficulty =0.5;
         if(screen == 7)
             difficulty =1;
-        
         
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
@@ -88,11 +87,7 @@ class Game : public Screen{
         bg.setPosition(0,0);
         bg.setSize(sf::Vector2<float>(bgw,bgh));
         bg.setTexture(&background);
-            
-        
-        
-        
-        
+           
         // Creates gravity
         b2World world(gravity, true);
         
@@ -102,7 +97,6 @@ class Game : public Screen{
         world.SetContactListener(&cl);
         world.SetContactListener(&gl);
         
-       
         
         // Sets up map terrain and generates a randomgenerated map
         Ground* ground = new Ground();
@@ -142,20 +136,11 @@ class Game : public Screen{
         auto goal = new Goal(&world, player, lastx, lasty);
         objects.push_back(goal);
         
-         
-        
-        std::stringstream ss;
-        ss << "Points: " << 0;
-        
-       
-        
-        
         
         // Game loop
         while(window.isOpen()) {
             
             sf::Event event;
-            
             
             while (window.pollEvent(event))
             {
@@ -177,8 +162,6 @@ class Game : public Screen{
                 accumulator -= timeStep;
             }
             
-            
-            
             window.clear();
             //Set Background to follow player
             window.setView(window.getDefaultView());
@@ -191,7 +174,6 @@ class Game : public Screen{
             if (-bgy>bgh-WHeight) bgy=-bgh+WHeight;
             bg.setPosition(-bgx,bgy);
             window.draw(bg);
-            
             
             
             // Set view to follow player
@@ -230,8 +212,7 @@ class Game : public Screen{
     sf::Clock clock;
     sf::ContextSettings setting;
     std::vector<GameObject*> objects;
-    std::vector<Coin> coins;
-    std::vector<Goal> goal;
+    
     
 };
 
