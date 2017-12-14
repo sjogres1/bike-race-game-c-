@@ -36,7 +36,7 @@ namespace {
     const int32 positionIterations = 6;
     const float y_points = -500;
     const float x_points = 400;
-
+    
     float difficulty = 0;
     const int map_length = 200;
 }
@@ -57,7 +57,7 @@ class Game : public Screen{
     
     
     int open(sf::RenderWindow &window, int screen) {
-
+        
         if(screen == 5)
             difficulty =0.1;
         if(screen == 6)
@@ -88,7 +88,7 @@ class Game : public Screen{
         bg.setPosition(0,0);
         bg.setSize(sf::Vector2<float>(bgw,bgh));
         bg.setTexture(&background);
-           
+        
         // Creates gravity
         b2World world(gravity, true);
         
@@ -162,7 +162,7 @@ class Game : public Screen{
                 world.Step(timeStep, velocityIterations, positionIterations);
                 accumulator -= timeStep;
             }
-          
+            
             
             window.clear();
             //Set Background to follow player
@@ -181,16 +181,18 @@ class Game : public Screen{
             // Set view to follow player
             window.setView(view);
             view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
-             //draw objects to the map all the time, 60 times per second
+            //draw objects to the map all the time, 60 times per second
             for (auto obj : objects) {
                 obj->update();
                 obj->render(window);
             }
-              if(goal->getCollected() ) {
-                  counter++;
+            if(goal->getCollected() ) {
+                psc.update();
+                psc.getFinish();
+                counter++;
                 player->increasePoints(50);
             }
-          
+            
             window.setView(window.getDefaultView());
             psc.update();
             window.draw(psc);
@@ -198,15 +200,15 @@ class Game : public Screen{
             //player->debugLog(std::cout);
             if(goal->getCollected() ) {
                 if(counter > 1){
-                usleep(1000000);
-                usleep(1000000);
-                usleep(1000000);
-                //TODO set "camera" back to original position
-                window.clear();
-                objects.clear();
-                window.setView(window.getDefaultView());
-                window.setSize(sf::Vector2u(SCREEN_WIDTH, SCREEN_HEIGHT));
-                return GAMESTATE_MAINMENU;
+                    usleep(1000000);
+                    usleep(1000000);
+                    usleep(1000000);
+                    //TODO set "camera" back to original position
+                    window.clear();
+                    objects.clear();
+                    window.setView(window.getDefaultView());
+                    window.setSize(sf::Vector2u(SCREEN_WIDTH, SCREEN_HEIGHT));
+                    return GAMESTATE_MAINMENU;
                 }
             }
             
