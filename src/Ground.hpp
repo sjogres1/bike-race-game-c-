@@ -7,6 +7,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
+#include <random>
+#include <ctime>
 
 
 
@@ -64,42 +66,41 @@ public:
             }
         }
 
-	std::list<std::pair<float, float>> generateGroundPoints(int difficulty, int length){
+	std::list<std::pair<float, float>> generateGroundPoints(float difficulty, int length){
 		std::list<std::pair<float, float>> groundPoints;
 		std::pair<float, float> firstPoint;
 		std::pair<float, float> lastPoint;
 		firstPoint.first = -20;
 		firstPoint.second = -20;
 		groundPoints.push_back(firstPoint);
-		firstPoint.first = 0;
+		firstPoint.first = 5;
 		firstPoint.second = -20;
 		groundPoints.push_back(firstPoint);
-		float r;
 		std::pair<float, float> updatedPoint;
 		std::pair<float, float> creationVector;
 		creationVector.first = 0;
 		creationVector.second = 0;
-		float randomNumberX;
-		float randomNumberY;
-		int min = -1;
-		int max = 1;
+		double randomNumberY;
 		difficulty = 1;
+		srand(time(NULL));
+		std::default_random_engine generator;
+		std::normal_distribution<double> distribution(difficulty, 1.0);
+		float k = 0.001;
+		float friction = 0.2;
+		float frictionForce;
 
 		for(int count = 0; count <= length; ++count)
-		{
-		    r = (1- (float)rand() / RAND_MAX) * 2;		
-		    randomNumberX = 1 - 2*((float) (rand()) / (RAND_MAX));//2 - rand () % 5;
-		    randomNumberY = 1 - 2*((float) (rand()) / (RAND_MAX));//2 - rand () % 5;
+		{	
+		    randomNumberY =  1 - 2*((float) rand() / RAND_MAX); //distribution(generator);
 		    lastPoint = groundPoints.back();
-		    creationVector.first = creationVector.first + randomNumberX*difficulty;
 		    creationVector.second = creationVector.second + randomNumberY*difficulty;
-		    updatedPoint.first = lastPoint.first + creationVector.first;
+		    frictionForce = -creationVector.second*friction;
+		    creationVector.second = (creationVector.second) - k*(lastPoint.second+20) + frictionForce;
+		    updatedPoint.first = count;
 		    updatedPoint.second = lastPoint.second + creationVector.second;
-		    if (updatedPoint.first < lastPoint.first){
-			updatedPoint.first = lastPoint.first + 1;
-			}
 		    groundPoints.push_back(updatedPoint);
 		}
+		
 		return groundPoints;
 	}
 
@@ -109,3 +110,5 @@ private:
 	b2Body* groundBody;
 };
 #endif
+
+
