@@ -3,6 +3,7 @@
 #include "Box2DToSFML.hpp"
 #include "GameObject.hpp"
 #include "Car.hpp"
+#include <unistd.h>
 
 
 
@@ -46,7 +47,9 @@ class Goal : public GameObject
         void update()
         {
             if (g_contacting) {
-                m_goal->GetWorld()->DestroyBody(m_goal);
+                usleep(1000000);
+                usleep(1000000);
+                //m_goal->GetWorld()->DestroyBody(m_goal);
                 g_collected = true;
                 player2->increasePoints(50);
                 
