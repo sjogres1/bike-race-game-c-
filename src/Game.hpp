@@ -35,7 +35,8 @@ namespace {
     const int32 positionIterations = 6;
     const float y_points = -500;
     const float x_points = 400;
-    const int map_length = 400;
+    const int map_length = 200;
+
 }
 
 
