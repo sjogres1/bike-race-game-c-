@@ -20,7 +20,10 @@
 #include "GameObject.hpp"
 #include "Ground.hpp"
 #include "Goal.hpp"
+#include "PointsSpeedClock.hpp"
+#include <SFML/OpenGL.hpp>
 #include "DEFINITIONS.hpp"
+
 
 
 namespace {
@@ -35,6 +38,8 @@ namespace {
     const int map_length = 40;
 }
 
+
+
 class Game : public Screen{
     public:
     Game() {
@@ -44,6 +49,8 @@ class Game : public Screen{
     ~Game() {
         
     }
+    
+    
     
     
     
@@ -86,9 +93,20 @@ class Game : public Screen{
         world.SetContactListener(&cl);
         world.SetContactListener(&gl);
         
+       
+        
         // Sets up map terrain and generates a randomgenerated map
         Ground* ground = new Ground();
         auto groundPoints = ground->generateGroundPoints(3,map_length);
+        
+        // Draws map, pushes objects to the map and the player to the map
+        ground->drawMap(&world, groundPoints);
+        objects.push_back(ground);
+        Player* player = new Player(&world);
+        objects.push_back(player);
+        
+        // Creates text for points, speed and time spent
+        PointsSpeedClock psc(player);
         
         // Saves the last point of the map, so that we can put the goal there
         auto lastpoint = groundPoints.back();
@@ -104,13 +122,6 @@ class Game : public Screen{
         }
         
         
-        // Draws map, pushes objects to the map and the player to the map
-        ground->drawMap(&world, groundPoints);
-        objects.push_back(ground);
-        Player* player = new Player(&world);
-        objects.push_back(player);
-        
-        
         // Puts all the coins in the map
         for (size_t i = 1; i < groundPoints.size(); i++) {
             if( !(i % rand() % 5)) {
@@ -122,18 +133,12 @@ class Game : public Screen{
         auto goal = new Goal(&world, player, lastx, lasty);
         objects.push_back(goal);
         
+         
+        
         std::stringstream ss;
         ss << "Points: " << 0;
         
-        font.loadFromFile("LemonMilk.otf");
-        sf::Text atext;
-        atext.setFont(font);
-	atext.setCharacterSize(25);
-	atext.setStyle(sf::Text::Bold);
-	atext.setColor(sf::Color::Blue);
-	atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);
-	atext.setString(ss.str()); 
-	window.draw(atext);
+       
         
         
         
@@ -168,6 +173,7 @@ class Game : public Screen{
             window.clear();
             //Set Background to follow player
             window.setView(window.getDefaultView());
+            
             bgx = player->getPosition().x*20*BGSPEED;
             bgy = player->getPosition().y*20*BGSPEED;
             if (bgx<0) bgx=0;
@@ -175,31 +181,23 @@ class Game : public Screen{
             if (-bgy<0) bgy=0;
             if (-bgy>bgh-WHeight) bgy=-bgh+WHeight;
             bg.setPosition(-bgx,bgy);
-            
-            
-            
-            // The points follow player
-            atext.setPosition(player->getPosition().x*20+x_points, -player->getPosition().y*20+y_points);           
-            ss.clear();
-            ss.str(std::string());
-            ss << "Points: " << player->getPoints();
-            atext.setString(ss.str()); 
-            // Set view to follow player
-            view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
-          
-           
-            
             window.draw(bg);
-            window.draw(atext);
-            window.setView(view);
             
-            //draw objects to the map all the time, 60 times per second
-            //player->update();
-            //for (auto obj : objects)
+            
+            
+            // Set view to follow player
+            window.setView(view);
+            view.setCenter(player->getPosition().x*20+100, -player->getPosition().y*20-150);
+             //draw objects to the map all the time, 60 times per second
             for (auto obj : objects) {
                 obj->update();
                 obj->render(window);
             }
+          
+            window.setView(window.getDefaultView());
+            psc.update();
+            window.draw(psc);
+            
             //player->debugLog(std::cout);
             if(goal->getCollected() ) {
                 //TODO set "camera" back to original position

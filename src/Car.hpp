@@ -332,7 +332,7 @@ public:
 		float32 angle = body->GetAngle();
 		out << std::setprecision(2) << std::fixed << position.x << " " << position.y << " " << angle << std::endl;
 	}
-        void increasePoints() {points++;}
+        void increasePoints(int x) {points = points + x;}
         size_t getPoints() {return points;}
         
 private:
