@@ -44,13 +44,13 @@ namespace {
 
 class Game : public Screen{
     public:
-    Game() {
+    Game();
         
-    }
     
-    ~Game() {
+    
+    ~Game();
         
-    }
+    
     
     
     int open(sf::RenderWindow &window, int screen);
