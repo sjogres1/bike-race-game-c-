@@ -4,7 +4,7 @@
 
 # -- Compiler --
 CC=g++
-CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
+CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic -w
 SOURCES=main.cpp Game.hpp Game.cpp LevelsMenu.cpp LevelsMenu.hpp GameObject.hpp Interface.hpp Car.hpp Coin.hpp Coin.cpp MainMenu.hpp MainMenu.cpp HighScores.hpp DEFINITIONS.hpp Instructions.hpp Instructions.cpp Screens.hpp Ground.hpp Ground.cpp Goal.hpp Goal.cpp PointsSpeedClock.hpp PointsSpeedClock.cpp Box2DToSFML.hpp Box2DToSFML.cpp
 OBJECTS=main.o Game.o Box2DToSFML.o PointsSpeedClock.o Ground.o Coin.o Goal.o Instructions.o LevelsMenu.o MainMenu.o
 EXECUTABLE=main
