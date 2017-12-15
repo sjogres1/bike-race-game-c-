@@ -104,8 +104,13 @@ int Game::open(sf::RenderWindow &window, int screen) {
                 if (event.type == sf::Event::Closed) {
                     window.close();
                 }
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                    window.close();
+                if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Escape) {
+                    //Resize and position screen back to original, remove used gameobjects
+                    window.clear();
+                    objects.clear();
+                    window.setView(window.getDefaultView());
+                    window.setSize(sf::Vector2u(SCREEN_WIDTH, SCREEN_HEIGHT));
+                    return GAMESTATE_LEVELS;
                 }
                 Interface::playerKeyboard(event, player);
             }
@@ -159,7 +164,7 @@ int Game::open(sf::RenderWindow &window, int screen) {
                     usleep(1000000);
                     usleep(1000000);
                     usleep(1000000);
-                    //TODO set "camera" back to original position
+                    //Resize and position screen back to original, remove used gameobjects
                     window.clear();
                     objects.clear();
                     window.setView(window.getDefaultView());
