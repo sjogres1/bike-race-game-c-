@@ -55,19 +55,19 @@ class Game : public Screen{
     
     int open(sf::RenderWindow &window, int screen) {
         
-        if(screen == 5){
-            difficulty =0.4;
+        if(screen == 4){
+            difficulty =0.2;
             map_length=400;
             //goal_points=50;
         }
-        if(screen == 6){
+        if(screen == 5){
             difficulty =0.3;
             map_length = 500;
             //goal_points=100;
         }
         
-        if(screen == 7){
-            difficulty =0.6;
+        if(screen == 6){
+            difficulty =0.5;
             map_length=650;
             //goal_points=200;
             
