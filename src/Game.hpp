@@ -46,8 +46,12 @@ class Game : public Screen
 {
     public:
     Game();
+
     
     ~Game(); 
+
+        
+ 
         
     
     
