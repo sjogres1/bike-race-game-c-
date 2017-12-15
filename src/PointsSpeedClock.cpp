@@ -16,7 +16,7 @@ PointsSpeedClock::PointsSpeedClock(Player* player) {
         scoretext.setColor(sf::Color::White);
         scoretext.setPosition(0,20);
         
-        //Set parameters for speedtext
+        //Set parameters for finish line text
         speedtext.setFont(psc_font);
         speedtext.setCharacterSize(40);
         speedtext.setStyle(sf::Text::Bold);
@@ -42,14 +42,17 @@ PointsSpeedClock::~PointsSpeedClock() {
 
 
 void PointsSpeedClock::update() {
+    // updates points
  	score_ss.str("");
     score_ss << "Points " << player3->getPoints();
     scoretext.setString(score_ss.str()); 
-        
+
+    // updates finish line text    
     bikespeed_ss.str("");
     bikespeed_ss << "CONGRATULATIONS, YOU FINISHED :))!";
     speedtext.setString(bikespeed_ss.str()); 
-        
+
+    //updates clock    
     start = std::clock()/divide;
     clock_ss.str("");
     clock_ss << "Time: " << start; 
@@ -59,7 +62,8 @@ void PointsSpeedClock::update() {
 }
 
 void PointsSpeedClock::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-	target.draw(scoretext);
+	//draws every text to the screen
+    target.draw(scoretext);
         target.draw(clocktext);
         if(finish_count == 1){
             target.draw(speedtext);

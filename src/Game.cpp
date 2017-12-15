@@ -4,22 +4,24 @@ Game::Game() {}
 Game::~Game(){}
 
 int Game::open(sf::RenderWindow &window, int screen) {
-        
+        // First map parameters (Easy Beasy)
         if(screen == 4){
             difficulty =0.2;
             map_length=400;
-            //goal_points=50;
+            goal_points=50;
         }
+
+        //second map parameters( Vanilla)
         if(screen == 5){
             difficulty =0.3;
             map_length = 500;
-            //goal_points=100;
+            goal_points=100;
         }
-        
+        // Third map parameters ( Hard as Rock)
         if(screen == 6){
             difficulty =0.5;
             map_length=650;
-            //goal_points=200;
+            goal_points=200;
             
         }
         
@@ -148,7 +150,7 @@ int Game::open(sf::RenderWindow &window, int screen) {
             }
             // checks if goal is reached
             if(goal->getCollected() ) {
-                player->increasePoints(50);
+                player->increasePoints(goal_points);
                 psc.update();
                 psc.getFinish();
                 counter++;

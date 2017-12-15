@@ -8,24 +8,25 @@
 
 class Coin : public GameObject
 {
-    //protected:
-    //Player* player;
+    
     public:
+        // implements coin texture, physics and position
     Coin(b2World* world, Player* player, double x, double y);
     
     
     
-    
+    // checks if coin is collected and add points if coin is collected
     void update(); 
-
+        // draws coin, if coin is not collected
         void render(sf::RenderTarget &rt) const
     {
         if(!collected) {rt.draw(coin);}
         
     }
     
-    
+    // checks if coin is contacted
     void startContact() {m_contacting = true;}
+    //ends coin contact
     void endContact() {m_contacting = false;}
     
     private:
@@ -38,7 +39,7 @@ class Coin : public GameObject
     Player* player1;
     
 };
-
+// this class handles coin contacting with Box2d b2ContactListener library
 class CoinListener : public b2ContactListener {
     void BeginContact(b2Contact* contact) {
         

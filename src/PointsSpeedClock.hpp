@@ -8,19 +8,23 @@
 class PointsSpeedClock : public sf::Drawable {
     
     public:
-
+       
+       // destructor
         ~PointsSpeedClock();
-    
-    
+         
+        //Sets drawing settings for points, speed and goaltext
         PointsSpeedClock(Player* player);
+        
     
+        //updates texts tha are printed to the screen
         void update();
         
-      
     
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        //Draws text to the screen
        
          void getFinish() {
+            // flag for finish line
         finish_count =1;
     }
     

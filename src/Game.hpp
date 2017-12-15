@@ -55,13 +55,14 @@ class Game : public Screen
         
     
     
-    
+    // opens the game and handles lots of function and parameters
     int open(sf::RenderWindow &window, int screen);
          
 
     //protected:
     
     private:
+    int goal_points;
     sf::RenderWindow window;
     sf::ContextSettings settings;
     sf::Clock clock;
