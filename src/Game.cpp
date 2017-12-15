@@ -7,7 +7,7 @@ int Game::open(sf::RenderWindow &window, int screen) {
         // First map parameters (Easy Beasy)
         if(screen == 4){
             difficulty =0.2;
-            map_length=50;
+            map_length=400;
             goal_points=50;
         }
 

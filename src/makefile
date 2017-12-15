@@ -5,8 +5,8 @@
 # -- Compiler --
 CC=g++
 CPPFLAGS=-g -std=c++11 -Wall -Wextra -pedantic -w
-SOURCES=main.cpp Game.hpp Game.cpp GameObject.hpp Interface.hpp Car.cpp Car.hpp Coin.cpp Coin.hpp MainMenu.hpp HighScores.hpp DEFINITIONS.hpp Instructions.cpp Instructions.hpp Screens.hpp Ground.cpp Ground.hpp Goal.cpp Goal.hpp PointsSpeedClock.cpp PointsSpeedClock.hpp Box2DToSFML.cpp Box2DToSFML.hpp MainMenu.cpp LevelsMenu.cpp LevelsMenu.hpp
-OBJECTS=main.o Game.o Car.o Coin.o Instructions.o Ground.o Goal.o PointsSpeedClock.o Box2DToSFML.o MainMenu.o LevelsMenu.o
+SOURCES=main.cpp Game.hpp Game.cpp GameObject.hpp Interface.hpp Car.cpp Car.hpp Coin.cpp Coin.hpp MainMenu.hpp HighScores.cpp HighScores.hpp DEFINITIONS.hpp Instructions.cpp Instructions.hpp Screens.hpp Ground.cpp Ground.hpp Goal.cpp Goal.hpp PointsSpeedClock.cpp PointsSpeedClock.hpp Box2DToSFML.cpp Box2DToSFML.hpp MainMenu.cpp LevelsMenu.cpp LevelsMenu.hpp
+OBJECTS=main.o Game.o Car.o Coin.o Instructions.o Ground.o Goal.o PointsSpeedClock.o Box2DToSFML.o MainMenu.o LevelsMenu.o HighScores.o
 EXECUTABLE=main
 INCFLAGS=-I./Box2D_v2.1.2/Box2D
 #BOX2D := /Box2D_v2.1.2/Box2D
