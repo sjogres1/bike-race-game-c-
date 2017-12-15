@@ -55,6 +55,7 @@ class Game : public Screen{
     
     int open(sf::RenderWindow &window, int screen);
          
+
     protected:
     float difficulty = 0;
     int map_length = 200;
