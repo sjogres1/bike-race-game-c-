@@ -4,26 +4,27 @@
 
 # -- Compiler --
 CC=g++
-CPPFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic -w
+CPPFLAGS=-g -std=c++11 -Wall -Wextra -pedantic -w
 SOURCES=main.cpp Game.hpp Game.cpp GameObject.hpp Interface.hpp Car.cpp Car.hpp Coin.cpp Coin.hpp MainMenu.hpp HighScores.hpp DEFINITIONS.hpp Instructions.cpp Instructions.hpp Screens.hpp Ground.cpp Ground.hpp Goal.cpp Goal.hpp PointsSpeedClock.cpp PointsSpeedClock.hpp Box2DToSFML.cpp Box2DToSFML.hpp MainMenu.cpp LevelsMenu.cpp LevelsMenu.hpp
 OBJECTS=main.o Game.o Car.o Coin.o Instructions.o Ground.o Goal.o PointsSpeedClock.o Box2DToSFML.o MainMenu.o LevelsMenu.o
 EXECUTABLE=main
-INCLUDES =  
-
+INCFLAGS=-I./Box2D_v2.1.2/Box2D
+#BOX2D := /Box2D_v2.1.2/Box2D
+LDFLAGS=-L./Box2D_v2.1.2/Box2D/Build/Box2D -lBox2D
 # -- Linker --
 #LFLAGS+=-L /lib 
-LIBS = -lsfml-graphics -lsfml-window -lsfml-system -lBox2D
+LIBS = -lsfml-graphics -lsfml-window -lsfml-system
 
 # -- Targets --
 
 
-all: $(SOURCES) $(EXECUTABLE)
+all: main
   
-$(EXECUTABLE): $(OBJECTS) 
-	$(CC) $(OBJECTS) $(INCLUDES) $(LFLAGS) $(LIBS) -o $@ 
+main: $(SOURCES) 
+	$(CC) $(CPPFLAGS) $(SOURCES) $(INCFLAGS) $(LIBS) $(LDFLAGS) -o main 
 
-.cc.o:
-	$(CC) $(INCLUDES) $(CPPFLAGS) $< -o $@
+#.cc.o:
+	
 
 run:
 	./main
