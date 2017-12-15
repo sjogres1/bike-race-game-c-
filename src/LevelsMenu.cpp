@@ -1,27 +1,6 @@
-#ifndef LEVELSMENU_HPP
-#define LEVELSMENU_HPP
+#include "LevelsMenu.hpp"
 
-#include <iostream>
-#include "Screens.hpp"
-#include "DEFINITIONS.hpp"
-
-
-class LevelsMenu : public Screen {
-
-private:
-    size_t position;
-    std::vector<sf::Text*> levels;
-    sf::Texture texture;
-    sf::Text level1;
-    sf::Text level2;
-    sf::Text level3;
-    sf::Font font;
-
-public:
-
-  LevelsMenu();
-  /*
-  {
+LevelsMenu::LevelsMenu() {
 
     position = 0;
     font.loadFromFile("LemonMilk.otf"); 
@@ -50,13 +29,10 @@ public:
     level3.setString("HARD AS ROCK");  
     levels.push_back(&level3);
   }
-  */
 
     
 
-  int open(sf::RenderWindow &window, int screen);
-  /*
-  {
+  int LevelsMenu::open(sf::RenderWindow &window, int screen)  {
 
     while (window.isOpen()) {
         int process = processEvents(window);    
@@ -82,13 +58,10 @@ public:
     //Temporary solution
     return -1;
 }
-   */
 
 
 
-  int processEvents(sf::RenderWindow& window);
-  /*
-  {
+  int LevelsMenu::processEvents(sf::RenderWindow& window) {
 
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -112,7 +85,7 @@ public:
         case sf::Keyboard::Up: 
             if(position > 0){
              position--;
-          }
+            }
 
         return GAMESTATE_LEVELS;
 
@@ -125,12 +98,6 @@ public:
       }
         
     }
-    
+
     return GAMESTATE_LEVELS;
   }
-  */
-};
-
-
-#endif
-

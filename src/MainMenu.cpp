@@ -1,26 +1,6 @@
-#ifndef MAINMENU_HPP
-#define MAINMENU_HPP
+#include "MainMenu.hpp"
 
-#include <iostream>
-#include "Screens.hpp"
-#include "DEFINITIONS.hpp"
-
-class MainMenu : public Screen {
-
-private:
-    size_t position;
-    std::vector<sf::Text*> options;
-    sf::Texture texture;
-    sf::Text option_levels;
-    sf::Text option_highscores;
-    sf::Text option_instructions;
-    sf::Font font;
-
-public:
-
-  MainMenu();
-  /*
-  {
+MainMenu::MainMenu() {
 
     position = 0;
     font.loadFromFile("LemonMilk.otf"); 
@@ -49,13 +29,10 @@ public:
     option_instructions.setString("INSTRUCTIONS"); 
     options.push_back(&option_instructions);
   }
-   */
 
     
 
-  int open(sf::RenderWindow &window, int screen) ;
-  /*
-  {
+  int MainMenu::open(sf::RenderWindow &window, int screen)  {
 
     while (window.isOpen()) {
         int process = processEvents(window);    
@@ -81,14 +58,11 @@ public:
     //Temporary solution
     return -1;
 }
-   */
 
 
 
     
-  int processEvents(sf::RenderWindow& window) ;
-  /*
-  {
+  int MainMenu::processEvents(sf::RenderWindow& window) {
 
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -128,9 +102,3 @@ public:
 
     return GAMESTATE_MAINMENU;
   }
-   */
-};
-
-
-#endif
-
