@@ -37,8 +37,8 @@ namespace {
     const float y_points = -500;
     const float x_points = 400;
     //int goal_points = 0;
-    float difficulty = 0;
-    int map_length = 200;
+    
+    
 }
 
 
@@ -56,18 +56,18 @@ class Game : public Screen{
     int open(sf::RenderWindow &window, int screen) {
         
         if(screen == 5){
-            difficulty =0.9;
+            difficulty =0.4;
             map_length=400;
             //goal_points=50;
         }
         if(screen == 6){
-            difficulty =0.8;
+            difficulty =0.3;
             map_length = 500;
             //goal_points=100;
         }
         
         if(screen == 7){
-            difficulty =1;
+            difficulty =0.6;
             map_length=650;
             //goal_points=200;
             
@@ -223,6 +223,10 @@ class Game : public Screen{
         //temporary solution
         return -1;
     }
+    
+    protected:
+    float difficulty = 0;
+    int map_length = 200;
     
     private:
     sf::RenderWindow window;
