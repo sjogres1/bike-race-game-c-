@@ -1,6 +1,8 @@
 #include "Game.hpp"
 
+Game::Game(){}
 
+Game::~Game(){}
 
 int Game::open(sf::RenderWindow &window, int screen) {
         
