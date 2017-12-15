@@ -10,23 +10,27 @@
 class Goal : public GameObject
 {
     public:
+    //Destructor
     ~Goal() {
 
     }
-
+    //Constructor
     Goal(b2World* world, Player* player, double x, double y);
-        
+      
+     //checks if goal is collected is collected
     void update();
     
     void render(sf::RenderTarget &rt) const
-    {
+    {//draws goal if it is not reached
         if(!g_collected) {rt.draw(goal);}
     }
     
-    
+    //checks if goal is contacted
     void contactGoal() {g_contacting = true;}
+    //end coin contact
     void endGoal() {g_contacting = false;}   
     bool getCollected () {
+        // flag for goal collection
         return g_collected;
     }
     
@@ -41,7 +45,7 @@ class Goal : public GameObject
     Player* player2;
     
 };
-
+// this class handles goal contacting with Box2d b2ContactListener library
 class GoalListener : public b2ContactListener {
     void BeginContact(b2Contact* contact) {
         

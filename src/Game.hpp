@@ -45,14 +45,11 @@ namespace {
 class Game : public Screen
 {
     public:
+    //Constructor
     Game();
 
-    
+    //Destructor
     ~Game(); 
-
-        
- 
-        
     
     
     // opens the game and handles lots of function and parameters

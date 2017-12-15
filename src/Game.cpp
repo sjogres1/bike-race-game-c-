@@ -24,9 +24,10 @@ int Game::open(sf::RenderWindow &window, int screen) {
             goal_points=200;
             
         }
-        
+        // sets fps and vertical sync
         window.setVerticalSyncEnabled(true);
         window.setFramerateLimit(60);
+        // loads font
         sf::Font font;
         if(!font.loadFromFile("LemonMilk.otf")) {
             std::cout << "Font does not work";
@@ -114,13 +115,15 @@ int Game::open(sf::RenderWindow &window, int screen) {
                     window.setSize(sf::Vector2u(SCREEN_WIDTH, SCREEN_HEIGHT));
                     return GAMESTATE_LEVELS;
                 }
+                // handles keyboard touches
                 Interface::playerKeyboard(event, player);
             }
             
             sf::Time dt = clock.restart();
             float accumulator = dt.asSeconds();
             while (accumulator > 0.0f)
-            {
+
+            {   //updates speed and position of the game
                 world.Step(timeStep, velocityIterations, positionIterations);
                 accumulator -= timeStep;
             }
@@ -129,7 +132,7 @@ int Game::open(sf::RenderWindow &window, int screen) {
             window.clear();
             //Set Background to follow player
             window.setView(window.getDefaultView());
-            // Puts background in the center of the screen, so that it looks cool
+            // Keeps background in the center of the screen, so that it looks cool and player moves forward and sight changes
             bgx = player->getPosition().x*20*BGSPEED;
             bgy = player->getPosition().y*20*BGSPEED;
             if (bgx<0) bgx=0;

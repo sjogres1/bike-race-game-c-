@@ -3,7 +3,7 @@
 Coin::Coin(b2World* world, Player* player, double x, double y) { //  Player* p, removed
         m_contacting = false;
         collected = false;
-        //player = p;
+
         player1 = player;
         // physics and texture for coin
         b2CircleShape circle;
@@ -18,6 +18,7 @@ Coin::Coin(b2World* world, Player* player, double x, double y) { //  Player* p, 
         fd.shape = &circle;
         fd.density = 1.1f;
         fd.isSensor = true;
+        
         // coin physics and texture implementation
         b2BodyDef bd;
         bd.position.Set(x,y);
