@@ -67,7 +67,7 @@ public:
 	
         void increasePoints(int x);
         
-        size_t getPoints(); 
+        int getPoints(); 
         
         //void contactHead() {h_contacting = true;}
         //void endHead() {h_contacting = false;}   

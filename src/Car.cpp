@@ -337,5 +337,5 @@ void Player::update()
 		out << std::setprecision(2) << std::fixed << position.x << " " << position.y << " " << angle << std::endl;
 	}
         void Player::increasePoints(int x) {points = points + x;}
-        size_t Player::getPoints() {return points;}
+        int Player::getPoints() {return points;}
         

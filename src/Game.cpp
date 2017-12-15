@@ -7,7 +7,7 @@ int Game::open(sf::RenderWindow &window, int screen) {
         // First map parameters (Easy Beasy)
         if(screen == 4){
             difficulty =0.2;
-            map_length=400;
+            map_length=50;
             goal_points=50;
         }
 
@@ -169,6 +169,12 @@ int Game::open(sf::RenderWindow &window, int screen) {
                     usleep(1000000);
                     usleep(1000000);
                     usleep(1000000);
+                    
+                    	
+                    HighScoreFile.open("highscores.txt", std::ios_base::app);
+                    HighScoreFile << player->getPoints() << "\n";
+                    HighScoreFile.close();
+                    
                     //Resize and position screen back to original, remove used gameobjects
                     window.clear();
                     objects.clear();

@@ -20,13 +20,14 @@ private:
     int score_int;
     std::vector<sf::Text> scores_text;
     std::vector<int> scores_int;
+    bool update_highscores = true;
     
 public:
 
   HighScores() {
       
     font.loadFromFile("LemonMilk.otf");
-    
+    /*
     std::fstream myfile("highscores.txt");
     while (myfile >> score_int){
         scores_int.push_back(score_int);
@@ -42,7 +43,7 @@ public:
         score_text.setString(std::to_string(scores_int[i])); 
         scores_text.push_back(score_text);
     }
-    
+    */
     
         
     title.setFont(font);
@@ -56,7 +57,26 @@ public:
     
 
   int open(sf::RenderWindow &window, int screen)  {
+    if (update_highscores==true){
+        scores_int.clear();
+        scores_text.clear();
+        std::fstream myfile("highscores.txt");
+        while (myfile >> score_int){
+            scores_int.push_back(score_int);
+        }
+        std::sort(scores_int.rbegin(), scores_int.rend());
 
+        for (int i = 0; i <  scores_int.size(); i++){
+            score_text.setFont(font);
+            score_text.setCharacterSize(10);
+            score_text.setStyle(sf::Text::Bold);
+            score_text.setColor(sf::Color::White);
+            score_text.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/20)*(10+i));
+            score_text.setString(std::to_string(scores_int[i])); 
+            scores_text.push_back(score_text);
+        }
+        update_highscores = false;
+    }
     while (window.isOpen()) {
         int process = processEvents(window);    
         window.clear();
@@ -69,7 +89,9 @@ public:
             window.draw(t);
         }
         window.display();
-
+        if (process == GAMESTATE_MAINMENU){
+            update_highscores = true;
+        }
         return process;
     }
 
@@ -88,19 +110,22 @@ public:
         switch (event.key.code){
 
         case sf::Keyboard::Escape:
+           update_highscores = true;
            return GAMESTATE_MAINMENU;
            
+        
+        /*    
         case sf::Keyboard::Up: 
           if(position > 0){
              position--;
           }
 
 
-        //case sf::Keyboard::Down:
-        //   if(position < scores.size() - 1) {
-        //    position++;
-        //   }
-
+        case sf::Keyboard::Down:
+           if(position < scores.size() - 1) {
+            position++;
+           }
+        */
            //return GAMESTATE_MAINMENU;
         }
       }

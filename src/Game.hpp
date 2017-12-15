@@ -21,6 +21,7 @@
 #include "Ground.hpp"
 #include "Goal.hpp"
 #include "PointsSpeedClock.hpp"
+#include <fstream>
 //#include <SFML/OpenGL.hpp>
 #include "DEFINITIONS.hpp"
 #include <unistd.h>
@@ -67,6 +68,7 @@ class Game : public Screen
     std::vector<GameObject*> objects;
     float difficulty = 0;
     int map_length = 200;
+    std::ofstream HighScoreFile;
     
 };
 
