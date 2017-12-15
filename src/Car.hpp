@@ -19,127 +19,89 @@
 
 #include "GameObject.hpp"
 #include "Box2DToSFML.hpp"
-//#include "Ground.hpp"
-
-
-
 
 class Player : public GameObject
 {
 public:
-	Player(b2World* world);
+    // Creates the Box2D bodies and the SFML textures of the vehicle
+    Player(b2World* world);
         
-        ~Player() {}
+    ~Player() {}
 	
-	void render(sf::RenderTarget &rt) const;
+    void render(sf::RenderTarget &rt) const;
 	
-	void update();
+    // Updates the position and the angle of the vehicle
+    void update();
 	
-	void setDrawingPosition();
+    // Draws the vehicle to the screen
+    void setDrawingPosition();
 	
-	void createShape(b2PolygonShape polygonShape);
+    // Creates the chassis from the polygon
+    // Parameter: Box2D polygon of the chassis
+    void createShape(b2PolygonShape polygonShape);
 	
-	const b2Vec2 getPosition() const;
+    // Returns the position of the chassis
+    const b2Vec2 getPosition() const;
 	
-	void forward();
+    // Accelerates the vehicle
+    void forward();
 	
-	void backwards();
+    // Reverse acceleration
+    void backwards();
 	
-	void brake();
+    // Brakes the car by stopping the wheels
+    void brake();
         
-        void stop();
+    // Disables the motors
+    void stop();
 	
-	void accelerate(float32 change); 
+    // Adjust the motor acceleration for both directions
+    // Parameter: The velocity change
+    void accelerate(float32 change); 
 	
-	void decreaseSpeed(float32 speedDecrease);
+    // Decreased the speed slowly
+    // Parameter: The velocity change
+    void decreaseSpeed(float32 speedDecrease);
         
-        void tiltback();
+    // Tilt the vehicle counterclockwise
+    void tiltback();
         
-        void tiltforward();
+    // Tilt the vehicle clockwise
+    void tiltforward();
         
-	/* DESCRIPTION:
-	 * Used for debugging player movement
-	 * Parameter: output stream
-	 */
-        
-        
-	void debugLog(std::ostream& out);
+    // Used for debugging the chassis position and angle  
+    // Prints these variables to the screen
+    // Parameter: The output stream
+    void debugLog(std::ostream& out);
 	
-        void increasePoints(int x);
+    // Increase the points 
+    // Parameter: the amount of points collected
+    void increasePoints(int x);
         
-        int getPoints(); 
-        
-        //void contactHead() {h_contacting = true;}
-        //void endHead() {h_contacting = false;}   
-        //bool getCollectedHead () {
-        //    return h_collected;
-        //}
-        //uint16 getcol1(){
-         //   return hd1.filter.categoryBits;
-        //}
+    // Returns the collected points
+    int getPoints(); 
         
 private:
 	
-	sf::ConvexShape shape;
-	sf::CircleShape wheel1;
-	sf::CircleShape wheel2;
-        sf::CircleShape headshape;
+    sf::ConvexShape shape;
+    sf::CircleShape wheel1;
+    sf::CircleShape wheel2;
+    sf::CircleShape headshape;
 	
-	b2Body* body;
-	b2Body* m_wheel1;
-	b2Body* m_wheel2;
-        b2Body* head;
-        sf::Texture bodytexture;
-        sf::Texture wheeltexture;
-        sf::Texture headtexture;
+    b2Body* body;
+    b2Body* m_wheel1;
+    b2Body* m_wheel2;
+    b2Body* head;
+    sf::Texture bodytexture;
+    sf::Texture wheeltexture;
+    sf::Texture headtexture;
 	        
-        b2RevoluteJoint* m_spring1;
-        b2RevoluteJoint* m_spring2;
-        b2RevoluteJoint* m_head;
+    b2RevoluteJoint* m_spring1;
+    b2RevoluteJoint* m_spring2;
+    b2RevoluteJoint* m_head;
         
-	//b2WheelJoint* m_spring1;
-	//b2WheelJoint* m_spring2;
-	
-	float32 m_hz;
-	float32 m_zeta;
-	float32 m_speed;
-        size_t points;
-        
-        //b2FixtureDef hd1;
-        
-        //bool h_contacting;
-        //bool h_collected;
-        
-        //sf::Time timeSinceLastUpdate = sf::Time::Zero;
+    int points;
 };
-/*
-class HeadListener : public b2ContactListener {
-    void BeginContact(b2Contact* contact) {
-        
-        void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-        void* bodyBUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-        if ( bodyBUserData == )
-            static_cast<Player*>( bodyUserData )->contactHead();
-        
-        //bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-        //if ( bodyUserData )
-          //  static_cast<Player*>( bodyUserData )->contactHead();
-        
-    }
-    
-    void EndContact(b2Contact* contact) {
-        
-        void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-        if ( bodyUserData )
-            static_cast<Player*>( bodyUserData )->endHead();
-        
-        bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-        if ( bodyUserData )
-            static_cast<Player*>( bodyUserData )->endHead();
-        
-    }
-};
-*/
 
 #endif /* CAR_HPP */
 

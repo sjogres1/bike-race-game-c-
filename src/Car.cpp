@@ -4,20 +4,16 @@
 Player::Player(b2World* world)
         {    
                 points = 0;
-		m_hz = 3.0f;
-		m_zeta = 0.1f;
-		m_speed = 30.0f;
-                //h_contacting = false;
-                //h_collected = false;
 		
+                // Creating the chassis
 		b2PolygonShape polygonShape;
 		b2Vec2 vertices[6];
-		vertices[0].Set(-3.8f, -2.0f);// -3.3f, -0.7f
-		vertices[1].Set(3.0f, -2.0f);// -3.3f, -0.7f
-		vertices[2].Set(2.9f, 0.0f);// 3.3f, 0.0f
-		vertices[3].Set(1.0f, 1.0f);// 1.5f, 1.0f
-		vertices[4].Set(-2.0f, 1.0f);// -1.5f, 1.0f
-		vertices[5].Set(-3.8f, 0.0f);// -3.3f, 0.0f
+		vertices[0].Set(-3.8f, -2.0f);
+		vertices[1].Set(3.0f, -2.0f);
+		vertices[2].Set(2.9f, 0.0f);
+		vertices[3].Set(1.0f, 1.0f);
+		vertices[4].Set(-2.0f, 1.0f);
+		vertices[5].Set(-3.8f, 0.0f);
 		polygonShape.Set(vertices, 6);
 		
                 shape = B2toSFRenderer::PolygonToSFConvex(polygonShape);
@@ -25,7 +21,17 @@ Player::Player(b2World* world)
         	bodytexture.setSmooth(true);
        		shape.setTexture(&bodytexture, true);
                 
-		b2CircleShape circle;
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position.Set(-16.0f, 4.8f);
+		body = world->CreateBody(&bd);
+		b2FixtureDef fixtureDef;
+		fixtureDef.shape = &polygonShape;
+		fixtureDef.density = 3.0f;
+		body->CreateFixture(&fixtureDef);
+                
+                // Creating the wheels
+                b2CircleShape circle;
 		circle.m_radius = 1.3f;
                 
                 wheel1 = B2toSFRenderer::CircleToSFCircle(circle);
@@ -34,23 +40,11 @@ Player::Player(b2World* world)
         	wheeltexture.setSmooth(true);
        		wheel1.setTexture(&wheeltexture, true);
                 wheel2.setTexture(&wheeltexture, true);
-		
-		b2BodyDef bd;
-		bd.type = b2_dynamicBody;
-		bd.position.Set(-16.0f, 4.8f);//2.8f
-		body = world->CreateBody(&bd);
-		b2FixtureDef fixtureDef;
-		fixtureDef.shape = &polygonShape;
-		fixtureDef.density = 3.0f;
-		//fixtureDef.friction = 0.3f;
-		//fixtureDef.restitution = 0.1;
-		body->CreateFixture(&fixtureDef);
-
+                
 		b2FixtureDef fd1;
 		fd1.shape = &circle;
 		fd1.density = 3.0f;
 		fd1.friction = 3.0f;
-		//fd.restitution = 0.1;
 		
 		bd.position.Set(-2.4f, 0.4f);
                 bd.linearDamping = 0.2f;
@@ -79,23 +73,19 @@ Player::Player(b2World* world)
                 head = world->CreateBody(&hed);
                 head->CreateFixture(&hd1);
                 
-                //hd1.filter.categoryBits = 0x0001;
-                //hd1.filter.maskBits = 0x0001;
-
-                
 		// Attaching the head to the body
                 b2RevoluteJointDef HeadJoint;
                 HeadJoint.bodyA = body;
                 HeadJoint.bodyB = head;
                 HeadJoint.collideConnected = false;
-                HeadJoint.localAnchorA.Set(0.8f, 0.9f); //the down left corner of the box
-                HeadJoint.localAnchorB.Set(0,0);//center of the circle
+                HeadJoint.localAnchorA.Set(0.8f, 0.9f);
+                HeadJoint.localAnchorB.Set(0,0); // Center of the circle
 		HeadJoint.enableMotor = false;
                 HeadJoint.enableLimit = true;
                 
                 m_head = (b2RevoluteJoint*)world->CreateJoint( &HeadJoint );
                 
-                // FIRST WHEEL AXIS
+                // Attaching the back wheel to the chassis
                 b2RevoluteJointDef WheelJointBack;
                 WheelJointBack.bodyA = body;
                 WheelJointBack.bodyB = m_wheel1;
@@ -109,24 +99,21 @@ Player::Player(b2World* world)
                 
                 m_spring1 = (b2RevoluteJoint*)world->CreateJoint( &WheelJointBack );
                 
-                // SECOND WHEEL AXIS
+                // Attaching the front wheel to the chassis
                 b2RevoluteJointDef WheelJointFront;
                 WheelJointFront.bodyA = body;
                 WheelJointFront.bodyB = m_wheel2;
                 WheelJointFront.collideConnected = false;
-                WheelJointFront.localAnchorA.Set(2.7f,-2.5f); //the down left corner of the box
-                WheelJointFront.localAnchorB.Set(0,0);//center of the circle
+                WheelJointFront.localAnchorA.Set(2.7f,-2.5f); 
+                WheelJointFront.localAnchorB.Set(0,0); // Center of the circle
                 
                 WheelJointFront.motorSpeed = -1.0f;
 		WheelJointFront.maxMotorTorque = 90000.0f;
 		WheelJointFront.enableMotor = false;
 		
-                
-                
                 m_spring2 = (b2RevoluteJoint*)world->CreateJoint( &WheelJointFront );
 		
-		
-	
+                // Converting the Box2D to the screen pixels
 		wheel1.setRadius(1.3f * Pix_Per_M);
 		wheel1.setPointCount(12000);
 		wheel2.setRadius(1.3f * Pix_Per_M);
@@ -136,26 +123,18 @@ Player::Player(b2World* world)
 		headshape.setPointCount(12000);
 		
 		createShape(polygonShape);
-                //head->SetUserData(this);
 }
 
 void Player::render(sf::RenderTarget &rt) const
 	{
-            
 		rt.draw(shape);
 		rt.draw(wheel1);
 		rt.draw(wheel2);
                 rt.draw(headshape);
-                //if(!h_collected) {head->GetWorld()->DestroyBody(head);}
 	}
 
 void Player::update()
 	{
-                //if (h_contacting) {
-                //    head->GetWorld()->DestroyBody(head);
-                    //h_collected = true;
-                //}
-            
 		shape.setPosition(body->GetPosition().x*Pix_Per_M,
 						  body->GetPosition().y*Pix_Per_M*(-1));
 		shape.setRotation(body->GetAngle() * (-180.0f / b2_pi));
@@ -174,8 +153,6 @@ void Player::update()
 		headshape.setPosition((head->GetPosition().x)*Pix_Per_M,
 						   (head->GetPosition().y)*Pix_Per_M*(-1));
 		headshape.setRotation(head->GetAngle() * (-180.0f / b2_pi));
-                
-                //h_collected = true;
 	}
        
 	
@@ -207,13 +184,8 @@ void Player::update()
 		shape.setPointCount(vcount);
 		for (int32 i = 0; i < vcount; i++) {
 			const b2Vec2 v = polygonShape.GetVertex(i);
-			shape.setPoint(i, sf::Vector2f(v.x*Pix_Per_M,
-										   v.y*Pix_Per_M*(-1)));
+			shape.setPoint(i, sf::Vector2f(v.x*Pix_Per_M, v.y*Pix_Per_M*(-1)));
 		}
-		
-		//auto fixt = m_wheel1->GetFixtureList();
-		//fixt->GetBody()->GetPosition()
-	
 		update();
 	}
 	
@@ -224,19 +196,21 @@ void Player::update()
 	
 	void Player::forward()
 	{
-		accelerate(1.0f); //4.0f
+		accelerate(1.0f);
 	}
 	
 	void Player::backwards()
 	{
 		accelerate(-2.0f);
 	}
+        
 	void Player::brake(){
             m_spring2->EnableMotor(true);
             m_spring1->EnableMotor(true);
             m_spring1->SetMotorSpeed(0.0f);
             m_spring2->SetMotorSpeed(0.0f);
         }
+        
         void Player::stop()
 	{
 		m_spring1->SetMotorSpeed(0.0f);
@@ -245,81 +219,57 @@ void Player::update()
                 m_spring1->EnableMotor(false);
 	}
 	
-	void Player::accelerate(float32 change) // 1.0f
+	void Player::accelerate(float32 change)
 	{
-            float a;
-                //m_spring2->EnableMotor(true);
+                float a;
                 m_spring1->EnableMotor(true);
                 auto mspeed = m_spring1->GetMotorSpeed();
-                //auto mspeed2 = m_spring2->GetMotorSpeed();
-		//if ((change > 0 && mspeed < 20.0f && mspeed2 < 20.0f) || (change < 0 && mspeed > -20.0f && mspeed2 > -20.0f)){
-                if ((change > 0 && mspeed < 30.0f) || (change < 0 && mspeed > -30.0f)){
+                
+                if ((change > 0 && mspeed < 30.0f) || (change < 0 && mspeed > -30.0f))
+                {
 			m_spring1->SetMotorSpeed(mspeed-change);
-                        //m_spring2->SetMotorSpeed(mspeed2-change);
                 }
+                
                 mspeed = m_spring1->GetMotorSpeed();
-                //mspeed2 = m_spring2->GetMotorSpeed();
-                //if ((mspeed>=20.0f && mspeed2>=20.0f) || (mspeed<= -20.0f && mspeed2<= -20.0f)){
-                if (mspeed>=30.0f || mspeed<= -30.0f){    
-                    if (mspeed>=0.0f){
+                if (mspeed>=30.0f || mspeed<= -30.0f)
+                {    
+                    if (mspeed>=0.0f)
+                    {
                         a = -1;
                     }
                     else
                         a = 1;
-                    //(change*5); 
-                    //decreaseSpeed(change*0.2);
-                    //m_spring2->EnableMotor(false);
-                    //m_spring1->EnableMotor(false);
-                   
+                    
                     m_spring1->SetMotorSpeed(-30.0f*a);
-                    //m_spring2->SetMotorSpeed(-20.0f*a);
-                }
-                //else (mspeed<= -10.0f && mspeed2<= -10.0f){
-                //   m_spring1->SetMotorSpeed(10.0f);
-                //    m_spring2->SetMotorSpeed(10.0f);
-                //}
-            //float deltaTime = timeSinceLastUpdate.asSeconds();
-            //if (m_wheel1->GetLinearVelocity().x > 500.0f)
-            //    stop();
-            //else{
-                //accelerate(deltaTime*100*(-acceleration));
-                //m_spring1->SetMotorSpeed(mspeed-deltaTime*100000000000000*(-change));
-            //}
-            //timeSinceLastUpdate.asSeconds();
-			
+                }           	
 	}
 	
-	void Player::decreaseSpeed(float32 speedDecrease)//2.0f
+	void Player::decreaseSpeed(float32 speedDecrease)
 	{
                 auto mspeed = m_spring1->GetMotorSpeed();
-		//auto mspeed2 = m_spring2->GetMotorSpeed();
-		//if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease && mspeed2 < 2*speedDecrease && mspeed2 > 2*speedDecrease)
+                
                 if (mspeed < 2*speedDecrease && mspeed > 2*speedDecrease)
 			stop();
-		if (mspeed > 0){
+		if (mspeed > 0)
 			m_spring1->SetMotorSpeed(mspeed-speedDecrease);
-                        //m_spring2->SetMotorSpeed(mspeed2-speedDecrease);
-                }
-		else if (mspeed < 0){
+		else if (mspeed < 0)
 			m_spring1->SetMotorSpeed(mspeed+speedDecrease);
-			//m_spring2->SetMotorSpeed(mspeed2+speedDecrease);
-                }
+                
 	}
         
-        void Player::tiltback(){
-            //auto body_angle = body->GetAngle();
-            //float desiredAngle = 0;
-            //body->ApplyTorque(4000);
+        void Player::tiltback()
+        {
             if (abs(body->GetAngularVelocity()) > 2)
                 return;
-            //body->ApplyTorque(5000);
+            
             body->ApplyAngularImpulse(300);
         }
-        void Player::tiltforward(){
-            //auto body_angle = body->GetAngle();
-            //body->ApplyTorque(-4000);
+        
+        void Player::tiltforward()
+        {
             if (abs(body->GetAngularVelocity()) > 2)
                 return;
+            
             body->ApplyAngularImpulse(-300);
         }
         
@@ -336,6 +286,14 @@ void Player::update()
 		float32 angle = body->GetAngle();
 		out << std::setprecision(2) << std::fixed << position.x << " " << position.y << " " << angle << std::endl;
 	}
-        void Player::increasePoints(int x) {points = points + x;}
-        int Player::getPoints() {return points;}
+        
+        void Player::increasePoints(int x) 
+        {
+            points = points + x;
+        }
+        
+        int Player::getPoints() 
+        {
+            return points;
+        }
         
