@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <fstream>
 #include "DEFINITIONS.hpp"
+#include <string> 
 
 class HighScores : public Screen {
 
@@ -13,33 +14,34 @@ private:
     size_t position;
     sf::Texture texture;
     sf::Text title;
-    sf::Text score;
     sf::Font font;
-    //stuff needed for reading the highscores from file
-    //std::vector<sf::Text*> scores_text;
-    //std::fstream myfile("highscores.txt");
-    //int a;
-    //std::vector<a> scores_int;
+    
+    sf::Text score_text;
+    int score_int;
+    std::vector<sf::Text> scores_text;
+    std::vector<int> scores_int;
     
 public:
 
   HighScores() {
       
     font.loadFromFile("LemonMilk.otf");
-     
-    //while (myfile >> a){
-    //    scores_int.push_back(a);
-    //}
-     
-    //for (int i = 0; i <  scores_int.size(); i++){
-    //    scores_text<i>.setFont(font);
-    //   score.setCharacterSize(10);
-    //    score.setStyle(sf::Text::Bold);
-    //    score.setColor(sf::Color::White);
-    //    score.setPosition(SCREEN_WIDTH/3,(SCREEN_HEIGHT/10)*(3+i));
-    //    score.setString(i); 
-    //    scores.push_back(&score);
-    //}
+    
+    std::fstream myfile("highscores.txt");
+    while (myfile >> score_int){
+        scores_int.push_back(score_int);
+    }
+    std::sort(scores_int.rbegin(), scores_int.rend());
+    
+    for (int i = 0; i <  scores_int.size(); i++){
+        score_text.setFont(font);
+        score_text.setCharacterSize(10);
+        score_text.setStyle(sf::Text::Bold);
+        score_text.setColor(sf::Color::White);
+        score_text.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/20)*(10+i));
+        score_text.setString(std::to_string(scores_int[i])); 
+        scores_text.push_back(score_text);
+    }
     
     
         
@@ -47,7 +49,7 @@ public:
     title.setCharacterSize(100);
     title.setStyle(sf::Text::Bold);
     title.setColor(sf::Color::Red);
-    title.setPosition(SCREEN_WIDTH/3,(SCREEN_HEIGHT/10)*2);
+    title.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/10)*2);
     title.setString("Highscores"); 
   }
 
@@ -58,19 +60,14 @@ public:
     while (window.isOpen()) {
         int process = processEvents(window);    
         window.clear();
-
-        //for(size_t i = 0; i < scores.size(); i++) {
-        //  if(i == position) {
-        //    scores[i]->setColor(sf::Color::Red);
-        //  } 
-        //  else {
-        //    scores[i]->setColor(sf::Color::White);
-        //  }
-        //}
-        window.draw(title);//
         
-        //for(auto t : scores)
-        //    window.draw(*t);
+        
+        
+        window.draw(title);
+        
+        for(auto t : scores_text){
+            window.draw(t);
+        }
         window.display();
 
         return process;

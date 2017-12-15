@@ -9,14 +9,14 @@ Instructions::Instructions() {
     title.setCharacterSize(100);
     title.setStyle(sf::Text::Bold);
     title.setColor(sf::Color::Red);
-    title.setPosition(SCREEN_WIDTH/5,(SCREEN_HEIGHT/10)*3);
+    title.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/10)*2);
     title.setString("Instructions");
     
     instructions.setFont(font);
-    instructions.setCharacterSize(20);
+    instructions.setCharacterSize(15);
     instructions.setStyle(sf::Text::Bold);
     instructions.setColor(sf::Color::Red);
-    instructions.setPosition(SCREEN_WIDTH/5,(SCREEN_HEIGHT/10)*5);
+    instructions.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/10)*5);
     instructions.setString("Accelerate using up and down arrow keys, tilt using left and right arrow keys"); 
 
   }
