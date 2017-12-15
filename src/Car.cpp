@@ -224,7 +224,7 @@ void Player::update()
 	
 	void Player::forward()
 	{
-		accelerate(2.0f); //4.0f
+		accelerate(1.0f); //4.0f
 	}
 	
 	void Player::backwards()
