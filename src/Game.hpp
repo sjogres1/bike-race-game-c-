@@ -42,13 +42,16 @@ namespace {
 }
 
 
-class Game : public Screen{
+class Game : public Screen
+{
     public:
     Game();
+
+    
+    ~Game(); 
+
         
-    
-    
-    ~Game();
+ 
         
     
     
@@ -56,9 +59,7 @@ class Game : public Screen{
     int open(sf::RenderWindow &window, int screen);
          
 
-    protected:
-    float difficulty = 0;
-    int map_length = 200;
+    //protected:
     
     private:
     sf::RenderWindow window;
@@ -66,6 +67,8 @@ class Game : public Screen{
     sf::Clock clock;
     sf::ContextSettings setting;
     std::vector<GameObject*> objects;
+    float difficulty = 0;
+    int map_length = 200;
     
 };
 

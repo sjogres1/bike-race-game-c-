@@ -4,11 +4,12 @@
  *
  * Created on December 12, 2017, 10:10 AM
  */
+#include <SFML/Graphics.hpp>
 
 #ifndef SCREENS_HPP
 #define SCREENS_HPP
 
-#include "Game.hpp"
+//#include "Game.hpp"
 
 #define GAMESTATE_MAINMENU 0
 #define GAMESTATE_LEVELS 1
