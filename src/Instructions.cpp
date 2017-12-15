@@ -36,7 +36,7 @@ int Instructions::open(sf::RenderWindow &window, int screen)  {
         return process;
     }
 
-    //Temporary solution
+    //Failsafe
     return -1;
 }
 

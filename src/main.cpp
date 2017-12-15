@@ -46,8 +46,8 @@ int main(){
 
     /*The main loop running the game. Each screen corresponds to number,
      *defined in Screens.hpp. These numbers are positive integers.
-     *The open function of each screen return a number corresponding to a
-     * new screen the player wishes to open*/
+     *If the player changes screen, the open function returns 
+     * a number corresponding to a new screen the player wishes to open*/
     while (screen >= 0) {
         screen = screens[screen]->open(window, screen);
    }

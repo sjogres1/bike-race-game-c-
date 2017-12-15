@@ -20,121 +20,25 @@ private:
     int score_int;
     std::vector<sf::Text> scores_text;
     std::vector<int> scores_int;
+    //flag for updating high scores only once when the screen is opened
     bool update_highscores = true;
     
 public:
 
-  HighScores() {
-      
-    font.loadFromFile("LemonMilk.otf");
-    /*
-    std::fstream myfile("highscores.txt");
-    while (myfile >> score_int){
-        scores_int.push_back(score_int);
-    }
-    std::sort(scores_int.rbegin(), scores_int.rend());
+  HighScores();
+  
+ /*Open gets two parameters. window is the game window, to which LevelsMenu 
+ performs its operations, i.e. draws the menu. Int is the number of
+ the screen/state that called the function*/
+  int open(sf::RenderWindow &window, int screen);  
     
-    for (int i = 0; i <  scores_int.size(); i++){
-        score_text.setFont(font);
-        score_text.setCharacterSize(10);
-        score_text.setStyle(sf::Text::Bold);
-        score_text.setColor(sf::Color::White);
-        score_text.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/20)*(10+i));
-        score_text.setString(std::to_string(scores_int[i])); 
-        scores_text.push_back(score_text);
-    }
-    */
-    
-        
-    title.setFont(font);
-    title.setCharacterSize(100);
-    title.setStyle(sf::Text::Bold);
-    title.setColor(sf::Color::Red);
-    title.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/10)*2);
-    title.setString("Highscores"); 
-  }
-
-    
-
-  int open(sf::RenderWindow &window, int screen)  {
-    if (update_highscores==true){
-        scores_int.clear();
-        scores_text.clear();
-        std::fstream myfile("highscores.txt");
-        while (myfile >> score_int){
-            scores_int.push_back(score_int);
-        }
-        std::sort(scores_int.rbegin(), scores_int.rend());
-
-        for (int i = 0; i <  scores_int.size(); i++){
-            score_text.setFont(font);
-            score_text.setCharacterSize(10);
-            score_text.setStyle(sf::Text::Bold);
-            score_text.setColor(sf::Color::White);
-            score_text.setPosition(SCREEN_WIDTH/6,(SCREEN_HEIGHT/20)*(10+i));
-            score_text.setString(std::to_string(scores_int[i])); 
-            scores_text.push_back(score_text);
-        }
-        update_highscores = false;
-    }
-    while (window.isOpen()) {
-        int process = processEvents(window);    
-        window.clear();
-        
-        
-        
-        window.draw(title);
-        
-        for(auto t : scores_text){
-            window.draw(t);
-        }
-        window.display();
-        if (process == GAMESTATE_MAINMENU){
-            update_highscores = true;
-        }
-        return process;
-    }
-
-    //Temporary solution
-    return -1;
-}
-
-
-
-    
-  int processEvents(sf::RenderWindow& window) {
-
-    sf::Event event;
-    while (window.pollEvent(event)) {
-      if (event.type == sf::Event::KeyReleased){
-        switch (event.key.code){
-
-        case sf::Keyboard::Escape:
-           update_highscores = true;
-           return GAMESTATE_MAINMENU;
-           
-        
-        /*    
-        case sf::Keyboard::Up: 
-          if(position > 0){
-             position--;
-          }
-
-
-        case sf::Keyboard::Down:
-           if(position < scores.size() - 1) {
-            position++;
-           }
-        */
-           //return GAMESTATE_MAINMENU;
-        }
-      }
-    }
-
-    return GAMESTATE_HIGHSCORES;
-  }
+  
+  /*Method defining and monitoring controls and user interaction 
+   (e.g. pressing esc to return) inside this state.
+   Gets the window as parameter.*/
+  int processEvents(sf::RenderWindow& window);
+  
+  
 };
-
-
 #endif
 

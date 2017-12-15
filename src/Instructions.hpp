@@ -4,7 +4,6 @@
 #include "DEFINITIONS.hpp"
 #include "Screens.hpp"
 #include <SFML/Graphics.hpp>
-//#include "Game.hpp"
 
 class Instructions : public Screen {
 
@@ -17,63 +16,16 @@ private:
 public:
 
   Instructions();
-      
- //   font.loadFromFile("LemonMilk.otf");
-      
- //   title.setFont(font);
- //   title.setCharacterSize(100);
- //   title.setStyle(sf::Text::Bold);
- //   title.setColor(sf::Color::Red);
- //   title.setPosition(SCREEN_WIDTH/5,(SCREEN_HEIGHT/10)*3);
- //   title.setString("Instructions");
-    
- //   instructions.setFont(font);
- //   instructions.setCharacterSize(20);
- //   instructions.setStyle(sf::Text::Bold);
- //   instructions.setColor(sf::Color::Red);
- //   instructions.setPosition(SCREEN_WIDTH/5,(SCREEN_HEIGHT/10)*5);
- //   instructions.setString("Accelerate using up and down arrow keys, tilt using left and right arrow keys"); 
+  
+  /*Open gets two parameters. window is the game window, to which LevelsMenu 
+ performs its operations, i.e. draws the menu. Int is the number of
+ the screen/state that called the function*/
+  int open(sf::RenderWindow &window, int screen);
 
-  //}
-
-    
-
-  int open(sf::RenderWindow &window, int screen);//  {
-
-    //while (window.isOpen()) {
-    //    int process = processEvents(window);    
-    //    window.clear();
-    
-    //    window.draw(title);
-    //    window.draw(instructions);
-    //    window.display();
-
-    //    return process;
-    //}
-
-    //Temporary solution
-    //return -1;
-//}
-
-
-
-    
-  int processEvents(sf::RenderWindow& window); //{
-
-    //sf::Event event;
-    //while (window.pollEvent(event)) {
-    //  if (event.type == sf::Event::KeyReleased){
-    //    switch (event.key.code){
-
-    //    case sf::Keyboard::Escape:
-    //       return GAMESTATE_MAINMENU;;
-           
-    //    }
-    //  }
-    //}
-
-    //return GAMESTATE_INSTRUCTIONS;
- // }
+   /*Method defining and monitoring controls and user interaction 
+   (e.g. pressing esc to return) inside this state.
+   Gets the window as parameter.*/
+  int processEvents(sf::RenderWindow& window);
 };
 
 
