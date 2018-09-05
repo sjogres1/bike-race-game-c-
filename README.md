@@ -1,4 +1,4 @@
-# Sample README file for C++ programming project
+README file for C++ programming project
 
 This is an initial git repository for your programming project.
 It contains an initial directory structure that we wish you could
